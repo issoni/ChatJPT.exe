@@ -31,7 +31,8 @@ public class MainMenuManager : MonoBehaviour
     public Text[] menuOptions;
     private string[] originalTexts; 
     private int selectedOption = 0;
-    private Coroutine cursorBlink; 
+    private Coroutine cursorBlink;
+    private Coroutine incrementInteger; 
 
     private void Start()
     {
@@ -98,10 +99,11 @@ public class MainMenuManager : MonoBehaviour
         bootText5.gameObject.SetActive(true);
         bootText5.text = "Memory Test : 420K OK";
 
-        StartCoroutine(IncrementInteger());
+        incrementInteger = StartCoroutine(IncrementInteger());
         yield return new WaitForSeconds(5f); //wait for 5 secs
-        StopCoroutine(IncrementInteger()); //why isnt this stopping? FIGURE OUT
+        StopCoroutine(incrementInteger); //why isnt this stopping? FIGURE OUT
 
+        bootText5.text += " OK"; 
 
         bootText9.text = "NanoWare Plug and Play BIOS Extension v1.3";
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
@@ -267,7 +269,7 @@ public class MainMenuManager : MonoBehaviour
         int counter = 420;
         while (true)
         {
-            bootText5.text = "Memory Test : " + counter.ToString() + "K OK";
+            bootText5.text = "Memory Test : " + counter.ToString() + "K";
             counter += Random.Range(2000, 10000); //increases by a random value
             yield return new WaitForSeconds(0.1f); //updates every 0.1 secs 
         }
