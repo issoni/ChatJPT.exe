@@ -23,26 +23,36 @@ public class MainMenuManager : MonoBehaviour
     public Image smolGuy;
     public Image copyrightPanel; 
     public GameObject menuPanel;
+    public Text playText;
+    public Text settingsText;
+    public Text creditsText;
+    public Text quitText; 
 
-    // Start is called before the first frame update
+    public Text[] menuOptions;
+    private int selectedOption = 0;
+    private Coroutine cursorBlink; 
+
     private void Start()
     {
         smolGuy.gameObject.SetActive(false); 
         menuPanel.SetActive(false); //menu is hidden at the start
-        StartCoroutine(BootSequence());
         bootText5.gameObject.SetActive(false);
-        copyrightPanel.gameObject.SetActive(false); 
+        copyrightPanel.gameObject.SetActive(false);
+
+        StartCoroutine(BootSequence());
+
+        menuOptions = new Text[] { playText, settingsText, creditsText, quitText }; 
     }
 
     private IEnumerator BootSequence()
     {
         //shows first line of text
         bootText1.text = "<color=#4CFFD9>ZETA VGA BIOS v1.8</color>";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         //shows second line of text
         bootText2.text = "<color=#EBFF8D>512</color>K <color=#EBFF8D>VGA</color> MODE";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         //shows third line of text
         bootText3.text = "Copyright 1992-1995 ZETA SYSTEMS INC."; 
@@ -51,27 +61,20 @@ public class MainMenuManager : MonoBehaviour
         bootText6.text = "Copyright 1991-1995 PixelWave Tech.";
         yield return new WaitForSeconds(2f); //wait for 2 secs
 
-
-        //start integer increment effect
-        //bootText5.gameObject.SetActive(true);
-        //StartCoroutine(IncrementInteger());
-
         //cursor blinking effect
-        StartCoroutine(BlinkCursor());
+        StartCoroutine(BlinkCursor(bootText4));
 
         yield return new WaitForSeconds(4f); //wait for 4 secs
-        //yield return new WaitUntil(() => Input.anyKeyDown);
 
         //stop cursor blinking
-        StopCoroutine(BlinkCursor()); 
-        //StopCoroutine(IncrementInteger());
+        StopCoroutine(BlinkCursor(bootText4)); 
 
         bootText6.text = ""; 
 
         //hide the boot texts and show menu
         //bootText1.gameObject.SetActive(false);
         //bootText2.gameObject.SetActive(false);
-        bootText3.gameObject.SetActive(false);
+        bootText3.gameObject.SetActive(false); 
         bootText4.gameObject.SetActive(false);
         //bootText5.gameObject.SetActive(false);
         //bootText6.gameObject.SetActive(false);
@@ -81,7 +84,7 @@ public class MainMenuManager : MonoBehaviour
         bootText2.text = "   Copyright (C) 1989-1995, NanoWare Corp.";
 
         bootText6.text = "Version GH4557";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         bootText7.text = "CYRIX MII CPU at 233MHz";
         yield return new WaitForSeconds(0.5f); //wait for 2 secs
@@ -90,37 +93,53 @@ public class MainMenuManager : MonoBehaviour
         bootText5.text = "Memory Test : 420K OK";
 
         StartCoroutine(IncrementInteger());
-        yield return new WaitForSeconds(5f); //wait for 4 secs
-        StopCoroutine(IncrementInteger()); //why isnt this stopping?
-        bootText5.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5f); //wait for 5 secs
+        StopCoroutine(IncrementInteger()); //why isnt this stopping? FIGURE OUT
 
 
         bootText9.text = "NanoWare Plug and Play BIOS Extension v1.3";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
         bootText10.text = "Copyright (C) 1995, NanoWare Corp.";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
 
         bootText11.text = "   Detecting IDE Primary Master   ... ";
-        yield return new WaitForSeconds(1f); //wait for 2 secs
+        yield return new WaitForSeconds(1f); //wait for 1 secs
         bootText11.text = "   Detecting IDE Primary Master   ... None";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         bootText12.text = "   Detecting IDE Primary Slave    ...";
-        yield return new WaitForSeconds(1f); //wait for 2 secs
+        yield return new WaitForSeconds(1f); //wait for 1 secs
         bootText12.text = "   Detecting IDE Primary Slave    ... None";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         bootText13.text = "   Detecting IDE Secondary Master ...";
-        yield return new WaitForSeconds(1f); //wait for 2 secs
+        yield return new WaitForSeconds(1f); //wait for 1 secs
         bootText13.text = "   Detecting IDE Secondary Master ... None";
-        yield return new WaitForSeconds(0.5f); //wait for 2 secs
-
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
         bootText14.text = "Press KEY to enter SETUP";
 
         yield return new WaitUntil(() => Input.anyKeyDown);
 
+        HideBootTexts(); 
+
+        copyrightPanel.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
+        bootText12.gameObject.SetActive(true);
+        bootText12.text = "Starting ChatJPT.exe ...";
+        yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
+        bootText13.gameObject.SetActive(true);
+        bootText13.text = "Press ENTER to pick an OPTION";
+
+        yield return new WaitForSeconds(2f); //wait for 2 secs
+
+        ShowMenu(); 
+
+    }
+
+    private void HideBootTexts()
+    {
         bootText1.gameObject.SetActive(false);
         bootText2.gameObject.SetActive(false);
         bootText3.gameObject.SetActive(false);
@@ -134,25 +153,92 @@ public class MainMenuManager : MonoBehaviour
         bootText11.gameObject.SetActive(false);
         bootText12.gameObject.SetActive(false);
         bootText13.gameObject.SetActive(false);
-        bootText14.gameObject.SetActive(false); 
+        bootText14.gameObject.SetActive(false);
         smolGuy.gameObject.SetActive(false);
-
-        copyrightPanel.gameObject.SetActive(true); 
-
-
-
-
-        //menuPanel.SetActive(true); 
     }
 
-    private IEnumerator BlinkCursor()
+    private void ShowMenu()
     {
-        Text cursor = bootText4;
+        menuPanel.SetActive(true);
+        UpdateMenuSelection(); 
+    }
+
+    private void Update()
+    {
+        if (menuPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                selectedOption = (selectedOption - 1 + menuOptions.Length) % menuOptions.Length;
+                UpdateMenuSelection(); 
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                selectedOption = (selectedOption + 1) % menuOptions.Length;
+                UpdateMenuSelection(); 
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                ExecuteMenuOption(); 
+            }
+        }
+    }
+
+    private void UpdateMenuSelection()
+    {
+        if (cursorBlink != null)
+        {
+            StopCoroutine(cursorBlink); 
+        }
+
+     
+        for(int i = 0; i < menuOptions.Length; i++)
+        {
+            if (i == selectedOption)
+            {
+                menuOptions[i].color = Color.blue;
+
+                //start cursor blinking for the selected option
+                cursorBlink = StartCoroutine(BlinkCursor(menuOptions[i]));
+            }
+            else
+            {
+                menuOptions[i].color = Color.white;
+                menuOptions[i].text = menuOptions[i].text.TrimEnd('_');
+            }
+        }
+    }
+
+    private void ExecuteMenuOption()
+    {
+        switch (selectedOption)
+        {
+            case 0:
+                //Load the game scene
+                SceneManager.LoadScene("SampleScene");
+                break;
+            case 1:
+                //Show settings
+                Debug.Log("Settings Selected");
+                break;
+            case 2:
+                //Show credits
+                Debug.Log("Credits Selected");
+                break;
+            case 3:
+                //Quit the game
+                Application.Quit();
+                break; 
+        }
+    }
+
+    private IEnumerator BlinkCursor(Text selectedOption)
+    {
         while (true)
         {
-            cursor.text = "_";
+            selectedOption.text = "_";
             yield return new WaitForSeconds(0.5f); //blinking duration
-            cursor.text = "";
+            selectedOption.text = "";
             yield return new WaitForSeconds(0.5f); 
         }
 
