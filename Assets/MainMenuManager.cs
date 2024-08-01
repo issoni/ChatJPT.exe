@@ -29,6 +29,7 @@ public class MainMenuManager : MonoBehaviour
     public Text quitText; 
 
     public Text[] menuOptions;
+    private string[] originalTexts; 
     private int selectedOption = 0;
     private Coroutine cursorBlink; 
 
@@ -41,7 +42,12 @@ public class MainMenuManager : MonoBehaviour
 
         StartCoroutine(BootSequence());
 
-        menuOptions = new Text[] { playText, settingsText, creditsText, quitText }; 
+        menuOptions = new Text[] { playText, settingsText, creditsText, quitText };
+        originalTexts = new string[menuOptions.Length];
+        for (int i = 0; i < menuOptions.Length; i++)
+        {
+            originalTexts[i] = menuOptions[i].text; 
+        }
     }
 
     private IEnumerator BootSequence()
@@ -194,8 +200,11 @@ public class MainMenuManager : MonoBehaviour
      
         for(int i = 0; i < menuOptions.Length; i++)
         {
+            menuOptions[i].text = originalTexts[i]; 
+
             if (i == selectedOption)
             {
+                //var option = menuOptions[i].text; 
                 menuOptions[i].color = Color.blue;
 
                 //start cursor blinking for the selected option
