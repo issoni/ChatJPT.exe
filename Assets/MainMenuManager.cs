@@ -243,11 +243,20 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator BlinkCursor(Text selectedOption)
     {
+        string text;
+        if (selectedOption.text != null)
+        {
+            text = selectedOption.text; 
+        } else
+        {
+            text = ""; 
+        }
+
         while (true)
         {
-            selectedOption.text = "_";
+            selectedOption.text = text + "_";
             yield return new WaitForSeconds(0.5f); //blinking duration
-            selectedOption.text = "";
+            selectedOption.text = text + "";
             yield return new WaitForSeconds(0.5f); 
         }
 
