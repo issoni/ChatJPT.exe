@@ -20,7 +20,8 @@ public class MainMenuManager : MonoBehaviour
     public Text bootText12;
     public Text bootText13;
     public Text bootText14;
-    public Image smolGuy; 
+    public Image smolGuy;
+    public Image copyrightPanel; 
     public GameObject menuPanel;
 
     // Start is called before the first frame update
@@ -30,6 +31,7 @@ public class MainMenuManager : MonoBehaviour
         menuPanel.SetActive(false); //menu is hidden at the start
         StartCoroutine(BootSequence());
         bootText5.gameObject.SetActive(false);
+        copyrightPanel.gameObject.SetActive(false); 
     }
 
     private IEnumerator BootSequence()
@@ -132,8 +134,10 @@ public class MainMenuManager : MonoBehaviour
         bootText11.gameObject.SetActive(false);
         bootText12.gameObject.SetActive(false);
         bootText13.gameObject.SetActive(false);
+        bootText14.gameObject.SetActive(false); 
         smolGuy.gameObject.SetActive(false);
 
+        copyrightPanel.gameObject.SetActive(true); 
 
 
 
