@@ -61,7 +61,7 @@ public class MainMenuManager : MonoBehaviour
         //yield return new WaitUntil(() => Input.anyKeyDown);
 
         //stop cursor blinking
-        StopCoroutine(BlinkCursor());
+        StopCoroutine(BlinkCursor()); 
         //StopCoroutine(IncrementInteger());
 
         bootText6.text = ""; 
@@ -70,7 +70,7 @@ public class MainMenuManager : MonoBehaviour
         //bootText1.gameObject.SetActive(false);
         //bootText2.gameObject.SetActive(false);
         bootText3.gameObject.SetActive(false);
-        //bootText4.gameObject.SetActive(false);
+        bootText4.gameObject.SetActive(false);
         //bootText5.gameObject.SetActive(false);
         //bootText6.gameObject.SetActive(false);
 
@@ -89,7 +89,9 @@ public class MainMenuManager : MonoBehaviour
 
         StartCoroutine(IncrementInteger());
         yield return new WaitForSeconds(5f); //wait for 4 secs
-        StopCoroutine(IncrementInteger());
+        StopCoroutine(IncrementInteger()); //why isnt this stopping?
+        bootText5.gameObject.SetActive(true);
+
 
         bootText9.text = "NanoWare Plug and Play BIOS Extension v1.3";
         yield return new WaitForSeconds(0.5f); //wait for 2 secs
@@ -97,13 +99,40 @@ public class MainMenuManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f); //wait for 2 secs
 
 
-        bootText11.text = "Copyright (C) 1995, NanoWare Corp.";
+        bootText11.text = "   Detecting IDE Primary Master   ... ";
         yield return new WaitForSeconds(1f); //wait for 2 secs
-        bootText12.text = "Copyright (C) 1995, NanoWare Corp.";
-        yield return new WaitForSeconds(1f); //wait for 2 secs
-        bootText13.text = "Copyright (C) 1995, NanoWare Corp.";
-        yield return new WaitForSeconds(1f); //wait for 2 secs
+        bootText11.text = "   Detecting IDE Primary Master   ... None";
+        yield return new WaitForSeconds(0.5f); //wait for 2 secs
 
+        bootText12.text = "   Detecting IDE Primary Slave    ...";
+        yield return new WaitForSeconds(1f); //wait for 2 secs
+        bootText12.text = "   Detecting IDE Primary Slave    ... None";
+        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+
+        bootText13.text = "   Detecting IDE Secondary Master ...";
+        yield return new WaitForSeconds(1f); //wait for 2 secs
+        bootText13.text = "   Detecting IDE Secondary Master ... None";
+        yield return new WaitForSeconds(0.5f); //wait for 2 secs
+
+
+        bootText14.text = "Press KEY to enter SETUP";
+
+        yield return new WaitUntil(() => Input.anyKeyDown);
+
+        bootText1.gameObject.SetActive(false);
+        bootText2.gameObject.SetActive(false);
+        bootText3.gameObject.SetActive(false);
+        bootText4.gameObject.SetActive(false);
+        bootText5.gameObject.SetActive(false);
+        bootText6.gameObject.SetActive(false);
+        bootText7.gameObject.SetActive(false);
+        bootText8.gameObject.SetActive(false);
+        bootText9.gameObject.SetActive(false);
+        bootText10.gameObject.SetActive(false);
+        bootText11.gameObject.SetActive(false);
+        bootText12.gameObject.SetActive(false);
+        bootText13.gameObject.SetActive(false);
+        smolGuy.gameObject.SetActive(false);
 
 
 
