@@ -27,9 +27,9 @@ public class MainMenuManager : MonoBehaviour
     public Text settingsText;
     public Text creditsText;
     public Text quitText;
-    public Image bootupImage;
-    public Image bootupImage1;
-    public Image bootupImage2; 
+    public CanvasGroup bootupImage;
+    public CanvasGroup bootupImage1;
+    public CanvasGroup bootupImage2; 
 
     public Text[] menuOptions;
     private string[] originalTexts; 
@@ -77,6 +77,7 @@ public class MainMenuManager : MonoBehaviour
         yield return new WaitForSeconds(2f); //wait for 2 secs
 
         bootupImage.gameObject.SetActive(true);
+        StartCoroutine(FadeIn(bootupImage)); 
 
         //cursor blinking effect
         StartCoroutine(BlinkCursor(bootText4));
@@ -89,16 +90,16 @@ public class MainMenuManager : MonoBehaviour
         bootText6.text = "";
 
 
-        //hide the boot texts and show menu
-        //bootText1.gameObject.SetActive(false);
-        //bootText2.gameObject.SetActive(false);
+        //hide the boot texts and show second screen 
         bootText3.gameObject.SetActive(false); 
         bootText4.gameObject.SetActive(false);
-        //bootText5.gameObject.SetActive(false);
-        //bootText6.gameObject.SetActive(false);
 
-        bootupImage.gameObject.SetActive(false);
+        // StartCoroutine(FadeOut(bootupImage));
+        yield return new WaitForSeconds(1f); //wait for fade out to complete - might not need this
+
         bootupImage1.gameObject.SetActive(true);
+        StartCoroutine(FadeIn(bootupImage1));
+        bootupImage.gameObject.SetActive(false);
 
         smolGuy.gameObject.SetActive(true);
         bootText1.text = "   NanoWare BIOS v3.7QX, Cherry Computing Initiative";
@@ -116,10 +117,15 @@ public class MainMenuManager : MonoBehaviour
 
         incrementInteger = StartCoroutine(IncrementInteger());
         yield return new WaitForSeconds(5f); //wait for 5 secs
-        StopCoroutine(incrementInteger); //why isnt this stopping? FIGURE OUT
+        StopCoroutine(incrementInteger);
 
-        bootupImage1.gameObject.SetActive(false);
+        //StartCoroutine(FadeOut(bootupImage1));
+        yield return new WaitForSeconds(1f); //wait for fade out to complete 
+
         bootupImage2.gameObject.SetActive(true);
+        StartCoroutine(FadeIn(bootupImage2));
+        bootupImage1.gameObject.SetActive(false);
+         
 
         bootText5.text += " OK"; 
 
@@ -134,21 +140,27 @@ public class MainMenuManager : MonoBehaviour
         bootText11.text = "   Detecting IDE Primary Master   ... None";
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
+
         bootText12.text = "   Detecting IDE Primary Slave    ...";
         yield return new WaitForSeconds(1f); //wait for 1 secs
         bootText12.text = "   Detecting IDE Primary Slave    ... None";
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
+
 
         bootText13.text = "   Detecting IDE Secondary Master ...";
         yield return new WaitForSeconds(1f); //wait for 1 secs
         bootText13.text = "   Detecting IDE Secondary Master ... None";
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
+
         bootText14.text = "Press KEY to enter SETUP";
 
         yield return new WaitUntil(() => Input.anyKeyDown);
 
-        bootupImage2.gameObject.SetActive(false);
+        StartCoroutine(FadeOut(bootupImage2));
+        yield return new WaitForSeconds(1f); //wait for fade out to complete
+
+        
         HideBootTexts(); 
 
         copyrightPanel.gameObject.SetActive(true);
@@ -163,6 +175,32 @@ public class MainMenuManager : MonoBehaviour
 
         ShowMenu(); 
 
+    }
+
+    private IEnumerator FadeIn(CanvasGroup canvasGroup, float duration = 1f)
+    {
+        canvasGroup.alpha = 0;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(elapsed / duration);
+            yield return null; 
+        }
+        canvasGroup.alpha = 1; 
+    }
+
+    private IEnumerator FadeOut(CanvasGroup canvasGroup, float duration = 1f)
+    {
+        canvasGroup.alpha = 1;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(1 - (elapsed / duration));
+            yield return null; 
+        }
+        canvasGroup.alpha = 0; 
     }
 
     private void HideBootTexts()
@@ -182,6 +220,7 @@ public class MainMenuManager : MonoBehaviour
         bootText13.gameObject.SetActive(false);
         bootText14.gameObject.SetActive(false);
         smolGuy.gameObject.SetActive(false);
+        bootupImage2.gameObject.SetActive(false);
     }
 
     private void ShowMenu()
@@ -264,20 +303,20 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator BlinkCursor(Text selectedOption)
     {
-        string text;
-        if (selectedOption.text != null)
-        {
-            text = selectedOption.text; 
-        } else
-        {
-            text = ""; 
-        }
+        string text = selectedOption.text ?? ""; 
+        //if (selectedOption.text != null)
+        //{
+        //    text = selectedOption.text; 
+        //} else
+        //{
+        //    text = ""; 
+        //}
 
         while (true)
         {
             selectedOption.text = text + "_";
             yield return new WaitForSeconds(0.5f); //blinking duration
-            selectedOption.text = text + "";
+            selectedOption.text = text;
             yield return new WaitForSeconds(0.5f); 
         }
 
