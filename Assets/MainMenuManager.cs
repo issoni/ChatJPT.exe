@@ -90,16 +90,17 @@ public class MainMenuManager : MonoBehaviour
         bootText6.text = "";
 
 
-        //hide the boot texts and show second screen 
-        bootText3.gameObject.SetActive(false); 
-        bootText4.gameObject.SetActive(false);
-
-        // StartCoroutine(FadeOut(bootupImage));
+        bootupImage1.gameObject.SetActive(true);
+        StartCoroutine(FadeOut(bootupImage));
         yield return new WaitForSeconds(1f); //wait for fade out to complete - might not need this
 
-        bootupImage1.gameObject.SetActive(true);
-        StartCoroutine(FadeIn(bootupImage1));
+        //StartCoroutine(FadeIn(bootupImage1));
         bootupImage.gameObject.SetActive(false);
+
+
+        //hide the boot texts and show second screen 
+        bootText3.gameObject.SetActive(false);
+        bootText4.gameObject.SetActive(false);
 
         smolGuy.gameObject.SetActive(true);
         bootText1.text = "   NanoWare BIOS v3.7QX, Cherry Computing Initiative";
@@ -120,10 +121,10 @@ public class MainMenuManager : MonoBehaviour
         StopCoroutine(incrementInteger);
 
         //StartCoroutine(FadeOut(bootupImage1));
-        yield return new WaitForSeconds(1f); //wait for fade out to complete 
+        //yield return new WaitForSeconds(1f); //wait for fade out to complete 
 
         bootupImage2.gameObject.SetActive(true);
-        StartCoroutine(FadeIn(bootupImage2));
+        //StartCoroutine(FadeIn(bootupImage2)); //test
         bootupImage1.gameObject.SetActive(false);
          
 
@@ -157,11 +158,12 @@ public class MainMenuManager : MonoBehaviour
 
         yield return new WaitUntil(() => Input.anyKeyDown);
 
+        HideBootTexts();
+
         StartCoroutine(FadeOut(bootupImage2));
         yield return new WaitForSeconds(1f); //wait for fade out to complete
+        bootupImage2.gameObject.SetActive(false);
 
-        
-        HideBootTexts(); 
 
         copyrightPanel.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
@@ -220,7 +222,6 @@ public class MainMenuManager : MonoBehaviour
         bootText13.gameObject.SetActive(false);
         bootText14.gameObject.SetActive(false);
         smolGuy.gameObject.SetActive(false);
-        bootupImage2.gameObject.SetActive(false);
     }
 
     private void ShowMenu()
