@@ -26,7 +26,10 @@ public class MainMenuManager : MonoBehaviour
     public Text playText;
     public Text settingsText;
     public Text creditsText;
-    public Text quitText; 
+    public Text quitText;
+    public Image bootupImage;
+    public Image bootupImage1;
+    public Image bootupImage2; 
 
     public Text[] menuOptions;
     private string[] originalTexts; 
@@ -40,6 +43,11 @@ public class MainMenuManager : MonoBehaviour
         menuPanel.SetActive(false); //menu is hidden at the start
         bootText5.gameObject.SetActive(false);
         copyrightPanel.gameObject.SetActive(false);
+        bootupImage.gameObject.SetActive(false);
+        bootupImage1.gameObject.SetActive(false);
+        bootupImage2.gameObject.SetActive(false);
+
+
 
         StartCoroutine(BootSequence());
 
@@ -68,6 +76,8 @@ public class MainMenuManager : MonoBehaviour
         bootText6.text = "Copyright 1991-1995 PixelWave Tech.";
         yield return new WaitForSeconds(2f); //wait for 2 secs
 
+        bootupImage.gameObject.SetActive(true);
+
         //cursor blinking effect
         StartCoroutine(BlinkCursor(bootText4));
 
@@ -76,7 +86,8 @@ public class MainMenuManager : MonoBehaviour
         //stop cursor blinking
         StopCoroutine(BlinkCursor(bootText4)); 
 
-        bootText6.text = ""; 
+        bootText6.text = "";
+
 
         //hide the boot texts and show menu
         //bootText1.gameObject.SetActive(false);
@@ -86,10 +97,14 @@ public class MainMenuManager : MonoBehaviour
         //bootText5.gameObject.SetActive(false);
         //bootText6.gameObject.SetActive(false);
 
+        bootupImage.gameObject.SetActive(false);
+        bootupImage1.gameObject.SetActive(true);
+
         smolGuy.gameObject.SetActive(true);
         bootText1.text = "   NanoWare BIOS v3.7QX, Cherry Computing Initiative";
         bootText2.text = "   Copyright (C) 1989-1995, NanoWare Corp.";
 
+         
         bootText6.text = "Version GH4557";
         yield return new WaitForSeconds(0.5f); //wait for 0.5 secs
 
@@ -102,6 +117,9 @@ public class MainMenuManager : MonoBehaviour
         incrementInteger = StartCoroutine(IncrementInteger());
         yield return new WaitForSeconds(5f); //wait for 5 secs
         StopCoroutine(incrementInteger); //why isnt this stopping? FIGURE OUT
+
+        bootupImage1.gameObject.SetActive(false);
+        bootupImage2.gameObject.SetActive(true);
 
         bootText5.text += " OK"; 
 
@@ -130,6 +148,7 @@ public class MainMenuManager : MonoBehaviour
 
         yield return new WaitUntil(() => Input.anyKeyDown);
 
+        bootupImage2.gameObject.SetActive(false);
         HideBootTexts(); 
 
         copyrightPanel.gameObject.SetActive(true);
