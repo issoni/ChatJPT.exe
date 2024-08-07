@@ -39,7 +39,6 @@ public class MainMenuManager : MonoBehaviour
     private int selectedOption = 0;
     private Coroutine cursorBlink;
     private Coroutine incrementInteger;
-    private bool isStartupAudioDone = false;
 
 
     private void Start()
@@ -53,6 +52,7 @@ public class MainMenuManager : MonoBehaviour
         bootupImage2.gameObject.SetActive(false);
 
         startupAudioSource.Play(); //play audio as soon as game starts
+        StartCoroutine(WaitForStartupAudioToEnd()); 
 
         StartCoroutine(BootSequence());
 
@@ -64,12 +64,12 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    //private IEnumerator WaitForStartupAudioToEnd()
-    //{
-      //  yield return new WaitWhile(() => startupAudioSource.isPlaying);
-        //loopingAudioSource.Play();
-        //loopingAudioSource.loop = true; 
-    //}
+    private IEnumerator WaitForStartupAudioToEnd()
+    {
+        yield return new WaitWhile(() => startupAudioSource.isPlaying);
+        loopingAudioSource.Play();
+        loopingAudioSource.loop = true; 
+    }
 
     private IEnumerator BootSequence()
     {
@@ -244,12 +244,13 @@ public class MainMenuManager : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (!isStartupAudioDone && !startupAudioSource.isPlaying)
         {
             isStartupAudioDone = true;
             loopingAudioSource.Play();
             loopingAudioSource.loop = true; 
-        }
+        }*/
 
         if (menuPanel.activeSelf)
         {
