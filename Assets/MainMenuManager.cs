@@ -29,13 +29,18 @@ public class MainMenuManager : MonoBehaviour
     public Text quitText;
     public CanvasGroup bootupImage;
     public CanvasGroup bootupImage1;
-    public CanvasGroup bootupImage2; 
+    public CanvasGroup bootupImage2;
+    public AudioSource startupAudioSource;
+    public AudioSource loopingAudioSource;
+
 
     public Text[] menuOptions;
     private string[] originalTexts; 
     private int selectedOption = 0;
     private Coroutine cursorBlink;
-    private Coroutine incrementInteger; 
+    private Coroutine incrementInteger;
+    private bool isStartupAudioDone = false;
+
 
     private void Start()
     {
@@ -47,7 +52,7 @@ public class MainMenuManager : MonoBehaviour
         bootupImage1.gameObject.SetActive(false);
         bootupImage2.gameObject.SetActive(false);
 
-
+        startupAudioSource.Play(); //play audio as soon as game starts
 
         StartCoroutine(BootSequence());
 
@@ -58,6 +63,13 @@ public class MainMenuManager : MonoBehaviour
             originalTexts[i] = menuOptions[i].text; 
         }
     }
+
+    //private IEnumerator WaitForStartupAudioToEnd()
+    //{
+      //  yield return new WaitWhile(() => startupAudioSource.isPlaying);
+        //loopingAudioSource.Play();
+        //loopingAudioSource.loop = true; 
+    //}
 
     private IEnumerator BootSequence()
     {
@@ -87,7 +99,6 @@ public class MainMenuManager : MonoBehaviour
         //stop cursor blinking
         StopCoroutine(BlinkCursor(bootText4)); 
 
-        bootText6.text = "";
 
 
         bootupImage1.gameObject.SetActive(true);
@@ -97,6 +108,7 @@ public class MainMenuManager : MonoBehaviour
         //StartCoroutine(FadeIn(bootupImage1));
         bootupImage.gameObject.SetActive(false);
 
+        bootText6.text = "";
 
         //hide the boot texts and show second screen 
         bootText3.gameObject.SetActive(false);
@@ -232,6 +244,13 @@ public class MainMenuManager : MonoBehaviour
 
     private void Update()
     {
+        if (!isStartupAudioDone && !startupAudioSource.isPlaying)
+        {
+            isStartupAudioDone = true;
+            loopingAudioSource.Play();
+            loopingAudioSource.loop = true; 
+        }
+
         if (menuPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
