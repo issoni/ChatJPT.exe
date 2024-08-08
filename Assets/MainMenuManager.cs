@@ -305,7 +305,7 @@ public class MainMenuManager : MonoBehaviour
         {
             case 0:
                 //Load the game scene
-                SceneManager.LoadScene("SampleScene");
+                SceneManager.LoadScene("Starting");
                 break;
             case 1:
                 //Show settings
