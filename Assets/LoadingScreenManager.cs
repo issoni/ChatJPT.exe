@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class LoadingScreenManager : MonoBehaviour
 {
 
-    public Slider loadingBar;
+    public Slider loadingBar; // make this an image instead 
     public float loadingTime = 3.5f;
     private float currentLoadTime = 0f; 
 
