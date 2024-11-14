@@ -21,6 +21,27 @@ public class LoadingScreenManager : MonoBehaviour
     {
         loadingBar.value = 0f;
 
+        float fillStep = 0.05f;
+        float waitTime = loadingTime * fillStep;
+
+        while (currentLoadTime < loadingTime)
+        {
+            loadingBar.value += fillStep;
+            yield return new WaitForSeconds(waitTime); 
+        }
+
+        loadingBar.value = 4f;
+
+        SceneManager.LoadScene("Starting");
+    }
+
+    
+
+    /*
+    private IEnumerator LoadScene()
+    {
+        loadingBar.value = 0f;
+
         while (currentLoadTime < loadingTime)
         {
             currentLoadTime += Time.deltaTime;
@@ -33,4 +54,5 @@ public class LoadingScreenManager : MonoBehaviour
         // For later: 
         //SceneManager.LoadScene("Starting"); 
     }
+    */ 
 }
