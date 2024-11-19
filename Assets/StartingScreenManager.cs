@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class StartingScreenManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-        
+       
+        Debug.Log("Playing animation: COS-cherries-2");
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
