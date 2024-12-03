@@ -24,12 +24,11 @@ public class DesktopManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         slidingPanel.gameObject.SetActive(true);
+        restoreButton.gameObject.SetActive(true);
 
         animator.Play("SlideIn");
 
-        yield return new WaitForSeconds(1f);
 
-        restoreButton.gameObject.SetActive(true); 
     }
     
 }
