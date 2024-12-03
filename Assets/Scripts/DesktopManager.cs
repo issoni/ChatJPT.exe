@@ -7,6 +7,7 @@ public class DesktopManager : MonoBehaviour
 {
     public RectTransform slidingPanel;
     public Button restoreButton;
+    public GameObject webpagePanel; 
 
     private Animator animator; 
 
@@ -30,5 +31,9 @@ public class DesktopManager : MonoBehaviour
 
 
     }
-    
+
+    public void ShowWebpage()
+    {
+        webpagePanel.SetActive(true); 
+    }
 }
