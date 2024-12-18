@@ -60,7 +60,8 @@ public class MessengerManager : MonoBehaviour
         messageContent.text = messageText;
 
         Canvas.ForceUpdateCanvases();
-        messagesContainer.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0); 
+        var contentRect = messagesContainer.GetComponent<RectTransform>(); 
+        contentRect.anchoredPosition = new Vector2(0, 0); 
     }
 
     IEnumerator ScheduleNPCResponse()
