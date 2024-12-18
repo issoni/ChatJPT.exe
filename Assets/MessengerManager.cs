@@ -57,7 +57,14 @@ public class MessengerManager : MonoBehaviour
 
         GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
         TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
-        messageContent.text = messageText;
+
+        if (isPlayer)
+        {
+            messageContent.text = "<color=#FF0000><b>for:</b></color>" + messageText;
+        } else
+        {
+            messageContent.text = "<color=#0077FF><b>jas:</b></color>" + messageText;
+        }
 
         Canvas.ForceUpdateCanvases();
         var contentRect = messagesContainer.GetComponent<RectTransform>(); 
