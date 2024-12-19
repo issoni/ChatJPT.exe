@@ -1,7 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; 
+using TMPro;
+
+// dialogue system
+[System.Serializable]
+public class Dialogue
+{
+    public string speaker;
+    public string text;
+    public bool triggersAction;
+    public string action;
+}
 
 public class MessengerManager : MonoBehaviour
 {
@@ -12,22 +22,36 @@ public class MessengerManager : MonoBehaviour
     public List<string> playerPrewrittenTexts;
     public List<string> npcPrewrittenTexts;
 
+    // dialogue system
+    public List<Dialogue> dialogues;
+    private int dialogueIndex = 0; 
+
     private int playerTextIndex = 0;
     private int npcTextIndex = 0;
     private bool isPlayerTurn = false;
-    private bool isTypingComplete = false; 
+    private bool isTypingComplete = false;
 
 
     void Start()
     {
+        dialogues = new List<Dialogue>
+        {
+            new Dialogue { speaker = "Forrest", text = "yo"},
+            new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
+            new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3"},
+            new Dialogue { speaker = "Jasper", text = "ooooo what music? bless my ears rn"},
+            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "openMoozik"}
+            // add more dialogue after testing 
+        };
+
         inputField.text = "";
         inputField.readOnly = true;
 
-        StartCoroutine(DelayNPCFirstMessage()); 
-
+        //StartCoroutine(DelayNPCFirstMessage());
+        StartCoroutine(PlayDialogues()); 
      }
 
-    void Update()
+    void Update() //update this to work with the new dialogues !!! 
     {
         if (isPlayerTurn && playerTextIndex < playerPrewrittenTexts.Count)
         {
@@ -107,6 +131,8 @@ public class MessengerManager : MonoBehaviour
         return Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2);
     }
 
+    /*
+
     IEnumerator DelayNPCFirstMessage()
     {
         yield return new WaitForSeconds(5f);
@@ -118,4 +144,41 @@ public class MessengerManager : MonoBehaviour
             StartCoroutine(EnablePlayerTurn());
         }
     }
+    */
+
+    // dialogue functions
+
+    void PerformAction(string action)
+    {
+        if (action == "openMoozik")
+        {
+            Debug.Log("Opening MOOZIK"); 
+        } else if (action == "copyCode")
+        {
+            Debug.Log("Copying code"); 
+        }
+    }
+
+    IEnumerator PlayDialogues()
+    {
+        while (dialogueIndex < dialogues.Count)
+        {
+            Dialogue currentDialogue = dialogues[dialogueIndex];
+
+            bool isPlayer = currentDialogue.speaker == "Jasper";
+            SendMessage(isPlayer, currentDialogue.text);
+
+            if (currentDialogue.triggersAction)
+            {
+                PerformAction(currentDialogue.action);
+            }
+
+            dialogueIndex++;
+            yield return new WaitForSeconds(2f);
+        }
+
+        isPlayerTurn = true; 
+    }
 }
+
+
