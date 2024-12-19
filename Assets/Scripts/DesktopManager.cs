@@ -39,7 +39,7 @@ public class DesktopManager : MonoBehaviour
     public void ShowWebpage()
     {
         webpagePanel.SetActive(true);
-        slidingPanel.gameObject.SetActive(false);
+        slidingPanel.gameObject.SetActive(false); // make a slide out animation 
 
     }
 }
