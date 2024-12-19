@@ -14,15 +14,18 @@ public class MessengerManager : MonoBehaviour
 
     private int playerTextIndex = 0;
     private int npcTextIndex = 0;
-    private bool isPlayerTurn = true;
+    private bool isPlayerTurn = false;
     private bool isTypingComplete = false; 
 
 
     void Start()
     {
         inputField.text = "";
-        inputField.readOnly = true; 
-    }
+        inputField.readOnly = true;
+
+        StartCoroutine(DelayNPCFirstMessage()); 
+
+     }
 
     void Update()
     {
@@ -82,6 +85,12 @@ public class MessengerManager : MonoBehaviour
             npcTextIndex++; 
         }
 
+        StartCoroutine(EnablePlayerTurn());
+
+    }
+
+    IEnumerator EnablePlayerTurn()
+    {
         yield return new WaitForSeconds(1f);
         isPlayerTurn = true; 
     }
@@ -96,5 +105,17 @@ public class MessengerManager : MonoBehaviour
     private bool IsMouseInput()
     {
         return Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2);
+    }
+
+    IEnumerator DelayNPCFirstMessage()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (npcPrewrittenTexts.Count > 0)
+        {
+            SendMessage(false, npcPrewrittenTexts[npcTextIndex]);
+            npcTextIndex++;
+            StartCoroutine(EnablePlayerTurn());
+        }
     }
 }

@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using TMPro; 
 
 public class DesktopManager : MonoBehaviour
 {
     public RectTransform slidingPanel;
     public Button restoreButton;
-    public GameObject webpagePanel; 
+    public GameObject webpagePanel;
+    public TMP_InputField messengerInputField; 
 
-    private Animator animator; 
+    private Animator animator;
+
+   
 
     private void Start()
     {
@@ -34,6 +38,8 @@ public class DesktopManager : MonoBehaviour
 
     public void ShowWebpage()
     {
-        webpagePanel.SetActive(true); 
+        webpagePanel.SetActive(true);
+        slidingPanel.gameObject.SetActive(false);
+
     }
 }
