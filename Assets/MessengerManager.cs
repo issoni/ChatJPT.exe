@@ -19,15 +19,11 @@ public class MessengerManager : MonoBehaviour
     public GameObject messagesContainer;
     public GameObject playerMessagePrefab;
     public GameObject npcMessagePrefab;
-    public List<string> playerPrewrittenTexts;
-    public List<string> npcPrewrittenTexts;
 
     // dialogue system
     public List<Dialogue> dialogues;
     private int dialogueIndex = 0; 
 
-    private int playerTextIndex = 0;
-    private int npcTextIndex = 0;
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
 
@@ -47,21 +43,28 @@ public class MessengerManager : MonoBehaviour
         inputField.text = "";
         inputField.readOnly = true;
 
-        //StartCoroutine(DelayNPCFirstMessage());
         StartCoroutine(PlayDialogues()); 
      }
 
-    void Update() //update this to work with the new dialogues !!! 
+    void Update()  
     {
-        if (isPlayerTurn && playerTextIndex < playerPrewrittenTexts.Count)
+        if (isPlayerTurn)
         {
-            if (Input.anyKeyDown && !IsMouseInput() && inputField.text.Length < playerPrewrittenTexts[playerTextIndex].Length)
+            HandlePlayerInput();
+        }
+    }
+
+    void HandlePlayerInput()
+    {
+        if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Jasper")
+        {
+            if (Input.anyKeyDown && !IsMouseInput() && inputField.text.Length < dialogues[dialogueIndex].text.Length)
             {
-                string currentText = playerPrewrittenTexts[playerTextIndex].Substring(0, inputField.text.Length + 1);
+                string currentText = dialogues[dialogueIndex].text.Substring(0, inputField.text.Length + 1);
                 inputField.text = currentText;
                 inputField.caretPosition = inputField.text.Length;
 
-                if (inputField.text == playerPrewrittenTexts[playerTextIndex])
+                if (inputField.text == dialogues[dialogueIndex].text)
                 {
                     isTypingComplete = true;
                 }
@@ -70,10 +73,11 @@ public class MessengerManager : MonoBehaviour
 
             if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
             {
-                SendMessage(true, playerPrewrittenTexts[playerTextIndex]);
-                playerTextIndex++;
+                SendMessage(true, dialogues[dialogueIndex].text);
+                dialogueIndex++;
+
                 StartCoroutine(ScheduleNPCResponse());
-                ResetPlayerInput(); 
+                ResetInputField(); 
             }
         }
     }
@@ -85,13 +89,9 @@ public class MessengerManager : MonoBehaviour
         GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
         TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
 
-        if (isPlayer)
-        {
-            messageContent.text = "<color=#FF0000><b>for:</b></color>" + messageText;
-        } else
-        {
-            messageContent.text = "<color=#0077FF><b>jas:</b></color>" + messageText;
-        }
+        messageContent.text = isPlayer ? $"<color=#0077FF><b>jas:</b></color> " +
+            $"{messageText}" : $"<color=#FF0000><b>for:</b></color> {messageText}";
+
 
         Canvas.ForceUpdateCanvases();
         var contentRect = messagesContainer.GetComponent<RectTransform>(); 
@@ -101,52 +101,58 @@ public class MessengerManager : MonoBehaviour
     IEnumerator ScheduleNPCResponse()
     {
         isPlayerTurn = false;
+        inputField.readOnly = true;
         yield return new WaitForSeconds(2f);
 
-        if (npcTextIndex < npcPrewrittenTexts.Count)
+        if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
         {
-            SendMessage(false, npcPrewrittenTexts[npcTextIndex]);
-            npcTextIndex++; 
+            Dialogue currentDialogue = dialogues[dialogueIndex];
+            SendMessage(false, currentDialogue.text);
+
+            if(currentDialogue.triggersAction)
+            {
+                PerformAction(currentDialogue.action); 
+            }
+
+            dialogueIndex++; 
         }
 
-        StartCoroutine(EnablePlayerTurn());
-
-    }
-
-    IEnumerator EnablePlayerTurn()
-    {
         yield return new WaitForSeconds(1f);
-        isPlayerTurn = true; 
+        isPlayerTurn = true;
+
+        inputField.readOnly = true; // Allow simulated input only
+
     }
 
-    void ResetPlayerInput()
+    void ResetInputField()
     {
         inputField.text = "";
         inputField.caretPosition = 0;
-        isTypingComplete = false; 
+        isTypingComplete = false;
     }
 
-    private bool IsMouseInput()
+
+    IEnumerator PlayDialogues()
     {
-        return Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2);
-    }
+        yield return new WaitForSeconds(2f);
 
-    /*
-
-    IEnumerator DelayNPCFirstMessage()
-    {
-        yield return new WaitForSeconds(5f);
-
-        if (npcPrewrittenTexts.Count > 0)
+        while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
         {
-            SendMessage(false, npcPrewrittenTexts[npcTextIndex]);
-            npcTextIndex++;
-            StartCoroutine(EnablePlayerTurn());
-        }
-    }
-    */
+            Dialogue currentDialogue = dialogues[dialogueIndex];
+            SendMessage(false, currentDialogue.text);
 
-    // dialogue functions
+            if (currentDialogue.triggersAction)
+            {
+                PerformAction(currentDialogue.action);
+            }
+
+            dialogueIndex++;
+            yield return new WaitForSeconds(2f);
+        }
+
+        isPlayerTurn = true;
+    }
+
 
     void PerformAction(string action)
     {
@@ -159,25 +165,10 @@ public class MessengerManager : MonoBehaviour
         }
     }
 
-    IEnumerator PlayDialogues()
+
+    private bool IsMouseInput()
     {
-        while (dialogueIndex < dialogues.Count)
-        {
-            Dialogue currentDialogue = dialogues[dialogueIndex];
-
-            bool isPlayer = currentDialogue.speaker == "Jasper";
-            SendMessage(isPlayer, currentDialogue.text);
-
-            if (currentDialogue.triggersAction)
-            {
-                PerformAction(currentDialogue.action);
-            }
-
-            dialogueIndex++;
-            yield return new WaitForSeconds(2f);
-        }
-
-        isPlayerTurn = true; 
+        return Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2);
     }
 }
 

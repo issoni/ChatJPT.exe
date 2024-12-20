@@ -660,7 +660,7 @@ MonoBehaviour:
   slidingPanel: {fileID: 2061771689}
   restoreButton: {fileID: 1303596107}
   webpagePanel: {fileID: 837788816}
-  messengerInputField: {fileID: 1361129863}
+  messengerInputField: {fileID: 1361129865}
 --- !u!1 &396730591
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +913,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &588505057
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2535,14 +2535,7 @@ MonoBehaviour:
   messagesContainer: {fileID: 396730591}
   playerMessagePrefab: {fileID: 635586818948965472, guid: 5f02a250f0d754e338049f5ff7772a1a, type: 3}
   npcMessagePrefab: {fileID: 3650312333866867594, guid: a1010e89f68ca46bfa763c6191a8a09e, type: 3}
-  playerPrewrittenTexts:
-  - 'Hi there! '
-  - How are you?
-  - 'That''s interesting! '
-  npcPrewrittenTexts:
-  - 'Hello! '
-  - I'm doing well, thanks!
-  - 'Yes, it is! '
+  dialogues: []
 --- !u!1 &1508498779
 GameObject:
   m_ObjectHideFlags: 0
