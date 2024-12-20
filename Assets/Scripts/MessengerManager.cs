@@ -11,21 +11,28 @@ public class Dialogue
     public string text;
     public bool triggersAction;
     public string action;
+    // i can add seconds as well, the time to wait between each text !! 
 }
 
 public class MessengerManager : MonoBehaviour
 {
+    // dialogue system
     public TMP_InputField inputField;
     public GameObject messagesContainer;
     public GameObject playerMessagePrefab;
     public GameObject npcMessagePrefab;
+    public GameObject buttonLink; 
 
-    // dialogue system
     public List<Dialogue> dialogues;
     private int dialogueIndex = 0; 
 
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
+
+    // other apps 
+    public GameObject moozikPanel;
+    private bool linkClicked = false; 
+
 
 
     void Start()
@@ -36,7 +43,8 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
             new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3"},
             new Dialogue { speaker = "Jasper", text = "ooooo what music? bless my ears rn"},
-            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "openMoozik"}
+            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME"},
+            new Dialogue { speaker = "Jasper", text = "hmm... don't know how you are getting hw done with that shit on but you do you bro :D"}
             // add more dialogue after testing 
         };
 
@@ -48,10 +56,27 @@ public class MessengerManager : MonoBehaviour
 
     void Update()  
     {
+
         if (isPlayerTurn)
         {
             HandlePlayerInput();
         }
+
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            TMP_Text npcText = messagesContainer.GetComponentInChildren<TMP_Text>();
+
+                int linkIndex = TMP_TextUtilities.FindIntersectingLink(npcText, Input.mousePosition, Camera.main);
+                if (linkIndex != -1)
+                {
+                    TMP_LinkInfo linkInfo = npcText.textInfo.linkInfo[linkIndex];
+                    HandleLinkClick(linkInfo.GetLinkID());
+                    Debug.Log("Link clicked"); 
+                }
+            
+        }
+        
     }
 
     void HandlePlayerInput()
@@ -77,7 +102,8 @@ public class MessengerManager : MonoBehaviour
                 dialogueIndex++;
 
                 StartCoroutine(ScheduleNPCResponse());
-                ResetInputField(); 
+                ResetInputField();
+                linkClicked = false; 
             }
         }
     }
@@ -89,11 +115,24 @@ public class MessengerManager : MonoBehaviour
         GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
         TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
 
-        messageContent.text = isPlayer ? $"<color=#0077FF><b>jas:</b></color> " +
-            $"{messageText}" : $"<color=#FF0000><b>for:</b></color> {messageText}";
+        if (!isPlayer && messageText.Contains("SONG NAME")) // CHANGE SONG NAME !!! 
+        {
+            //GameObject newLink = Instantiate(buttonLink, messagesContainer.transform);
+            // instantiate a button link and replace the song name with it 
+            messageText = messageText.Replace(
+                "SONG NAME",
+                "<link=\"song\"><color=#0000FF><u>SONG NAME</u></color></link>"
+                );
+            // add on click functionalities: opens song panel, link clciked is false agian 
+        }
+
+        messageContent.text = isPlayer
+            ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
+            : $"<color=#FF0000><b>for:</b></color> {messageText}";
 
 
         Canvas.ForceUpdateCanvases();
+
         var contentRect = messagesContainer.GetComponent<RectTransform>(); 
         contentRect.anchoredPosition = new Vector2(0, 0); 
     }
@@ -101,7 +140,9 @@ public class MessengerManager : MonoBehaviour
     IEnumerator ScheduleNPCResponse()
     {
         isPlayerTurn = false;
-        inputField.readOnly = true;
+        //inputField.readOnly = true;
+        
+
         yield return new WaitForSeconds(2f);
 
         if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
@@ -118,9 +159,16 @@ public class MessengerManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
+
+        // what is this for? 
+        /*while (!linkClicked && moozikPanel.activeSelf)
+        {
+            yield return null; 
+        }*/
+
         isPlayerTurn = true;
 
-        inputField.readOnly = true; // Allow simulated input only
+        //inputField.readOnly = true; // Allow simulated input only
 
     }
 
@@ -158,13 +206,33 @@ public class MessengerManager : MonoBehaviour
     {
         if (action == "openMoozik")
         {
-            Debug.Log("Opening MOOZIK"); 
+            Debug.Log("Opening MOOZIK");
+
         } else if (action == "copyCode")
         {
             Debug.Log("Copying code"); 
         }
     }
 
+    
+    void HandleLinkClick(string linkID)
+    {
+        if (linkID == "song")
+        {
+            moozikPanel.SetActive(true);
+            // wait for 3 seconds so the player can listen to the music? 
+            linkClicked = true;
+        }
+    }
+    
+
+    /*
+    public void ResumeConversationAfterMoozik()
+    {
+        // linkClicked = true;
+        // once the play button 
+    }
+    */ 
 
     private bool IsMouseInput()
     {
