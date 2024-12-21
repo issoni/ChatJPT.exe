@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 // dialogue system
 [System.Serializable]
@@ -246,22 +247,81 @@ public class MessengerManager : MonoBehaviour
         GameObject messagePrefab = isPlayer ? playerMessagePrefab : npcMessagePrefab;
 
         GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
-        TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
+
+ 
+      
 
         if (!isPlayer && messageText.Contains("SONG NAME")) // CHANGE SONG NAME !!! 
         {
+            TMP_Text npcText = newMessage.GetComponent<TMP_Text>();
+
+            string[] parts = messageText.Split(new string[] { "SONG NAME" }, System.StringSplitOptions.None);
+
+            // Set the text with a clickable link
+            
+
+            npcText.text = $"<color=#FF0000><b>for:</b></color> {parts[0]}<link=SongName><color=#0000FF><u>SONG NAME</u></color></link>{(parts.Length > 1 ? parts[1] : "")}";
+
+            // Enable rich text interaction
+            npcText.richText = true;
+
+
+            // Add a listener for clicks on the text
+            
+                int linkIndex = TMP_TextUtilities.FindIntersectingLink(npcText, Input.mousePosition, Camera.current);
+                Debug.Log(linkIndex);
+                if (linkIndex != -1)
+                {
+                    TMP_LinkInfo linkInfo = npcText.textInfo.linkInfo[linkIndex];
+                    HandleLinkClick(linkInfo.GetLinkID());
+                    Debug.Log("Link clicked");
+                }
+
+            
+            /*
+            TMP_Text npcText = newMessage.GetComponent<TMP_Text>();
+            string[] parts = messageText.Split(new string[] { "SONG NAME" }, System.StringSplitOptions.None);
+            npcText.text = $"<color=#FF0000><b>for:</b></color> {parts[0]}";
+
+            GameObject buttonObj = new GameObject("SongButton", typeof(RectTransform));
+            buttonObj.transform.SetParent(newMessage.transform, false); 
+
+            Button button = buttonObj.AddComponent<Button>();
+            TextMeshProUGUI buttonText = buttonObj.AddComponent<TextMeshProUGUI>();
+
+            buttonText.text = "SONG NAME";
+            buttonText.font = npcText.font;
+            buttonText.fontSize = npcText.fontSize;
+            buttonText.color = new Color(0, 0, 1);
+            buttonText.enableWordWrapping = false;
+            buttonText.alignment = TextAlignmentOptions.Left;
+
+            RectTransform rect = buttonObj.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(buttonText.preferredWidth, buttonText.preferredHeight); 
+            rect.anchoredPosition = new Vector2(npcText.preferredWidth, 0);
+
+            button.onClick.AddListener(() =>
+            {
+                Debug.Log("Song button was clicked.");
+                OpenMoozikPanel();
+            });
+            */
+
             //GameObject newLink = Instantiate(buttonLink, messagesContainer.transform);
             // instantiate a button link and replace the song name with it 
-            messageText = messageText.Replace(
-                "SONG NAME",
-                "<link=\"song\"><color=#0000FF><u>SONG NAME</u></color></link>"
-                );
+            //messageText = messageText.Replace(
+            //  "SONG NAME",
+            //"<link=\"song\"><color=#0000FF><u>SONG NAME</u></color></link>"
+            // );
             // add on click functionalities: opens song panel, link clciked is false agian 
-        }
-
-        messageContent.text = isPlayer
+        } else
+        {
+            TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
+            messageContent.text = isPlayer
             ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
             : $"<color=#FF0000><b>for:</b></color> {messageText}";
+
+        }
 
 
         Canvas.ForceUpdateCanvases();
@@ -358,15 +418,23 @@ public class MessengerManager : MonoBehaviour
 
     
     void HandleLinkClick(string linkID)
-    {
-        if (linkID == "song")
-        {
-            moozikPanel.SetActive(true);
-            // wait for 3 seconds so the player can listen to the music? 
-            linkClicked = true;
-        }
-    }
+{
+    // Detect if a link is clicked
     
+        if (linkID == "SongName")
+        {
+            Debug.Log("Song button was clicked.");
+            OpenMoozikPanel();
+        }
+}
+
+    public void OpenMoozikPanel()
+    {
+        Debug.Log("Opening Moozik application");
+        moozikPanel.SetActive(true);
+        linkClicked = true;
+    }
+
 
     /*
     public void ResumeConversationAfterMoozik()
@@ -374,7 +442,7 @@ public class MessengerManager : MonoBehaviour
         // linkClicked = true;
         // once the play button 
     }
-    */ 
+    */
 
     private bool IsMouseInput()
     {
