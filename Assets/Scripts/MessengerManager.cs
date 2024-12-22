@@ -44,7 +44,7 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
             new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3"},
             new Dialogue { speaker = "Jasper", text = "ooooo what music? bless my ears rn"},
-            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME"},
+            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "SongLinkImage"},
             new Dialogue { speaker = "Jasper", text = "hmm... don't know how you are getting hw done with that shit on but you do you bro :D"},
             new Dialogue { speaker = "Forrest", text = "uh yeah… actually jas"},
             new Dialogue { speaker = "Forrest", text = "i haven't even started T_T"},
@@ -188,28 +188,6 @@ public class MessengerManager : MonoBehaviour
         {
             HandlePlayerInput();
         }
-
-        /*else
-        {
-            StartCoroutine(PlayDialogues());
-            ResetInputField();
-        }*/
-
-        /*
-        if (Input.GetMouseButtonDown(0))
-        {
-            TMP_Text npcText = messagesContainer.GetComponentInChildren<TMP_Text>();
-
-                int linkIndex = TMP_TextUtilities.FindIntersectingLink(npcText, Input.mousePosition, Camera.main);
-                if (linkIndex != -1)
-                {
-                    TMP_LinkInfo linkInfo = npcText.textInfo.linkInfo[linkIndex];
-                    HandleLinkClick(linkInfo.GetLinkID());
-                    Debug.Log("Link clicked"); 
-                }
-            
-        }
-        */
         
     }
 
@@ -248,82 +226,13 @@ public class MessengerManager : MonoBehaviour
 
         GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
 
- 
-      
+        TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
 
-        if (!isPlayer && messageText.Contains("SONG NAME")) // CHANGE SONG NAME !!! 
-        {
-            TMP_Text npcText = newMessage.GetComponent<TMP_Text>();
+        messageContent.text = isPlayer
+        ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
+        : $"<color=#FF0000><b>for:</b></color> {messageText}";
 
-            string[] parts = messageText.Split(new string[] { "SONG NAME" }, System.StringSplitOptions.None);
-
-            // Set the text with a clickable link
-            
-
-            npcText.text = $"<color=#FF0000><b>for:</b></color> {parts[0]}<link=SongName><color=#0000FF><u>SONG NAME</u></color></link>{(parts.Length > 1 ? parts[1] : "")}";
-
-            // Enable rich text interaction
-            npcText.richText = true;
-
-
-            // Add a listener for clicks on the text
-            
-                int linkIndex = TMP_TextUtilities.FindIntersectingLink(npcText, Input.mousePosition, Camera.current);
-                Debug.Log(linkIndex);
-                if (linkIndex != -1)
-                {
-                    TMP_LinkInfo linkInfo = npcText.textInfo.linkInfo[linkIndex];
-                    HandleLinkClick(linkInfo.GetLinkID());
-                    Debug.Log("Link clicked");
-                }
-
-            
-            /*
-            TMP_Text npcText = newMessage.GetComponent<TMP_Text>();
-            string[] parts = messageText.Split(new string[] { "SONG NAME" }, System.StringSplitOptions.None);
-            npcText.text = $"<color=#FF0000><b>for:</b></color> {parts[0]}";
-
-            GameObject buttonObj = new GameObject("SongButton", typeof(RectTransform));
-            buttonObj.transform.SetParent(newMessage.transform, false); 
-
-            Button button = buttonObj.AddComponent<Button>();
-            TextMeshProUGUI buttonText = buttonObj.AddComponent<TextMeshProUGUI>();
-
-            buttonText.text = "SONG NAME";
-            buttonText.font = npcText.font;
-            buttonText.fontSize = npcText.fontSize;
-            buttonText.color = new Color(0, 0, 1);
-            buttonText.enableWordWrapping = false;
-            buttonText.alignment = TextAlignmentOptions.Left;
-
-            RectTransform rect = buttonObj.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(buttonText.preferredWidth, buttonText.preferredHeight); 
-            rect.anchoredPosition = new Vector2(npcText.preferredWidth, 0);
-
-            button.onClick.AddListener(() =>
-            {
-                Debug.Log("Song button was clicked.");
-                OpenMoozikPanel();
-            });
-            */
-
-            //GameObject newLink = Instantiate(buttonLink, messagesContainer.transform);
-            // instantiate a button link and replace the song name with it 
-            //messageText = messageText.Replace(
-            //  "SONG NAME",
-            //"<link=\"song\"><color=#0000FF><u>SONG NAME</u></color></link>"
-            // );
-            // add on click functionalities: opens song panel, link clciked is false agian 
-        } else
-        {
-            TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
-            messageContent.text = isPlayer
-            ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
-            : $"<color=#FF0000><b>for:</b></color> {messageText}";
-
-        }
-
-
+        
         Canvas.ForceUpdateCanvases();
 
         var contentRect = messagesContainer.GetComponent<RectTransform>(); 
@@ -353,20 +262,8 @@ public class MessengerManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        // what is this for? 
-        /*while (!linkClicked && moozikPanel.activeSelf)
-        {
-            yield return null; 
-        }*/
-
-        //if (!(dialogues[dialogueIndex].speaker == "Forrest"))
-        //{
+        
         isPlayerTurn = true;
-
-        //}
-
-
-        //inputField.readOnly = true; // Allow simulated input only
 
     }
 
@@ -406,9 +303,20 @@ public class MessengerManager : MonoBehaviour
 
     void PerformAction(string action)
     {
-        if (action == "openMoozik")
+        if (action == "SongLinkImage")
         {
-            Debug.Log("Opening MOOZIK");
+            GameObject newImageButton = Instantiate(buttonLink, messagesContainer.transform);
+
+            // Add a button listener to handle the click event
+            Button button = newImageButton.GetComponent<Button>();
+            if (button != null)
+            {
+                button.onClick.AddListener(() =>
+                {
+                    Debug.Log("Image button clicked. Activating song panel...");
+                    OpenMoozikPanel();
+                });
+            }
 
         } else if (action == "copyCode")
         {
@@ -416,17 +324,6 @@ public class MessengerManager : MonoBehaviour
         }
     }
 
-    
-    void HandleLinkClick(string linkID)
-{
-    // Detect if a link is clicked
-    
-        if (linkID == "SongName")
-        {
-            Debug.Log("Song button was clicked.");
-            OpenMoozikPanel();
-        }
-}
 
     public void OpenMoozikPanel()
     {
