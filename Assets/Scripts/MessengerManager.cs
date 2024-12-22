@@ -29,10 +29,10 @@ public class MessengerManager : MonoBehaviour
 
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
+    private bool isImageClicked = false; 
 
     // other apps 
     public GameObject moozikPanel;
-    private bool linkClicked = false; 
 
 
 
@@ -215,7 +215,7 @@ public class MessengerManager : MonoBehaviour
 
                 StartCoroutine(ScheduleNPCResponse());
                 ResetInputField();
-                linkClicked = false; 
+                //linkClicked = false; 
             }
         }
     }
@@ -293,11 +293,9 @@ public class MessengerManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
         }
 
-        //if (!(dialogues[dialogueIndex].speaker == "Forrest"))
-        //{
-            isPlayerTurn = true;
+        
+        isPlayerTurn = true;
 
-        //}
     }
 
 
@@ -307,7 +305,6 @@ public class MessengerManager : MonoBehaviour
         {
             GameObject newImageButton = Instantiate(buttonLink, messagesContainer.transform);
 
-            // Add a button listener to handle the click event
             Button button = newImageButton.GetComponent<Button>();
             if (button != null)
             {
@@ -329,17 +326,9 @@ public class MessengerManager : MonoBehaviour
     {
         Debug.Log("Opening Moozik application");
         moozikPanel.SetActive(true);
-        linkClicked = true;
+        //link1Clicked = true;
     }
 
-
-    /*
-    public void ResumeConversationAfterMoozik()
-    {
-        // linkClicked = true;
-        // once the play button 
-    }
-    */
 
     private bool IsMouseInput()
     {
