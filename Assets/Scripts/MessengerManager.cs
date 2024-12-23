@@ -42,33 +42,33 @@ public class MessengerManager : MonoBehaviour
     {
         dialogues = new List<Dialogue>
         {
-            new Dialogue { speaker = "Forrest", text = "yo", delay = 3.0f},
+            new Dialogue { speaker = "Forrest", text = "yo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
-            new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3", delay = 3.0f},
+            new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ooooo what music? bless my ears rn"},
-            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "SongLinkImage", delay = 1.7f},
+            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "SongLinkImage", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "hmm... don't know how you are getting hw done with that shit on but you do you bro :D"},
-            new Dialogue { speaker = "Forrest", text = "uh yeah… actually jas", delay = 1.5f},
-            new Dialogue { speaker = "Forrest", text = "i haven't even started T_T", delay = 1.5f},
+            new Dialogue { speaker = "Forrest", text = "uh yeah… actually jas", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "i haven't even started T_T", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "you know it’s due tmr right…"},
-            new Dialogue { speaker = "Forrest", text = "IKKKK", delay = 2.0f},
-            new Dialogue { speaker = "Forrest", text = "i left that shit for last minute like i always do. not only do i have to do the work but prepare for a mental breakdown", delay = 4.0f},
+            new Dialogue { speaker = "Forrest", text = "IKKKK", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "i left that shit for last minute like i always do. not only do i have to do the work but prepare for a mental breakdown", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "rip, good luck. it took me a full week to finish lol"},
-            new Dialogue { speaker = "Forrest", text = "shit. how much you got left?", delay = 1.8f},
+            new Dialogue { speaker = "Forrest", text = "shit. how much you got left?", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "just gotta test one more function and then im donee. lmk if you're gonna need help"},
-            new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer", delay = 2.5f},
-            new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?", delay = 4.5f},
-            new Dialogue { speaker = "Forrest", text = "pretty please", delay = 1.5f},
+            new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "pretty please", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
-            new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 2.8f},
+            new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
-            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 3.0f},
-            new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
+            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 1.0f},
+            new Dialogue { speaker = "Jasper", text = "lol ok. one sec", triggersAction = true, action = "CopyCode"},
             // copy paster code action 
-            new Dialogue { speaker = "Forrest", text = "beautiful"},
-            new Dialogue { speaker = "Forrest", text = "amazing"},
-            new Dialogue { speaker = "Forrest", text = "divine"},
-            new Dialogue { speaker = "Forrest", text = "thanks bro"},
+            new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "divine", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "thanks bro", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "yeah yeah np :p lmk if you need more of my “help”"},
             /*
             new Dialogue { speaker = "Forrest", text = "fo sho, thanks brother"},
@@ -338,9 +338,36 @@ public class MessengerManager : MonoBehaviour
                 });
             }
 
-        } else if (action == "copyCode")
+        } else if (action == "CopyCode")
         {
-            Debug.Log("Copying code"); 
+            ToggleInputField(false);
+            const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
+
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+            {
+                string clipboardText = GUIUtility.systemCopyBuffer;
+
+                if (clipboardText == mainFunctionText) {
+                    ToggleInputField(true);
+                    inputField.text += clipboardText;
+                    isTypingComplete = true;
+                    Debug.Log("Pasted into messenger"); 
+                } else
+                {
+                    Debug.LogWarning("Invalid text in clipboard."); 
+                }
+            }
+
+            if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
+            {
+                SendMessage(true, mainFunctionText);
+                dialogueIndex++;
+
+                StartCoroutine(ScheduleNPCResponse());
+                ResetInputField();
+                //linkClicked = false; 
+            }
+
         }
     }
 

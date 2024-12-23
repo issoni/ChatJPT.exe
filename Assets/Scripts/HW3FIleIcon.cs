@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
 
-public class HWFolderManager : MonoBehaviour
+public class HW3FIleIcon : MonoBehaviour
 {
+
     private float lastClickTime = 0f;
     private float doubleClickThreshold = 0.3f;
-    public GameObject folderPanel; 
-
+    public GameObject filePanel;
+  
+    // Update is called once per frame
     void Update()
     {
         
@@ -20,17 +22,16 @@ public class HWFolderManager : MonoBehaviour
 
         if (timeSinceLastClick <= doubleClickThreshold)
         {
-            OpenFolder();
+            OpenFile();
         }
 
         lastClickTime = Time.time;
     }
 
-    void OpenFolder()
+    void OpenFile()
     {
-        if (folderPanel != null)
-        {
-            folderPanel.SetActive(true); 
-        }
+        
+        filePanel.SetActive(true);
+        
     }
 }
