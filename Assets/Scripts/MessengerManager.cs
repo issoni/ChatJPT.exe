@@ -253,7 +253,7 @@ public class MessengerManager : MonoBehaviour
         
 
         yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
-        Debug.Log(dialogues[dialogueIndex].delay); 
+        //Debug.Log(dialogues[dialogueIndex].delay); 
 
         while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest") //changed this to while from if 
         {
@@ -271,7 +271,7 @@ public class MessengerManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
-        Debug.Log(dialogues[dialogueIndex].delay);
+        //Debug.Log(dialogues[dialogueIndex].delay);
 
 
         isPlayerTurn = true;
@@ -289,7 +289,7 @@ public class MessengerManager : MonoBehaviour
     IEnumerator PlayDialogues()
     {
         yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
-        Debug.Log(dialogues[dialogueIndex].delay);
+        //Debug.Log(dialogues[dialogueIndex].delay);
 
 
         while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
@@ -304,7 +304,7 @@ public class MessengerManager : MonoBehaviour
 
             dialogueIndex++;
             yield return new WaitForSeconds(currentDialogue.delay);
-            Debug.Log(dialogues[dialogueIndex].delay);
+            //Debug.Log(dialogues[dialogueIndex].delay);
 
         }
 
@@ -333,7 +333,7 @@ public class MessengerManager : MonoBehaviour
             {
                 button.onClick.AddListener(() =>
                 {
-                    Debug.Log("Image button clicked. Activating song panel...");
+                    //Debug.Log("Image button clicked. Activating song panel...");
                     OpenMoozikPanel();
                 });
             }
@@ -347,7 +347,7 @@ public class MessengerManager : MonoBehaviour
 
     public void OpenMoozikPanel()
     {
-        Debug.Log("Opening Moozik application");
+        //Debug.Log("Opening Moozik application");
         moozikPanel.SetActive(true);
         ToggleInputField(true);
         //link1Clicked = true;
