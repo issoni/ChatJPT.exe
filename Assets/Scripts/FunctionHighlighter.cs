@@ -14,13 +14,17 @@ public class FunctionHighlighter : MonoBehaviour
     private int highlightEndIndex;
 
     private const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
+    private string originalText;
 
     void Start()
     {
         selectedText = string.Empty;
         isHighlighting = false;
 
-        functionText.text = mainFunctionText; 
+        originalText = mainFunctionText;
+
+        functionText.text = originalText;
+
     }
 
     void Update()
@@ -58,7 +62,7 @@ public class FunctionHighlighter : MonoBehaviour
     {
         if (highlightStartIndex >= 0 && highlightEndIndex >= 0 && highlightStartIndex <= highlightEndIndex)
         {
-            string fullText = functionText.text;
+            string fullText = originalText;
 
             int validStartIndex = fullText.IndexOf(mainFunctionText);
             int validEndIndex = validStartIndex + mainFunctionText.Length - 1;
@@ -80,14 +84,14 @@ public class FunctionHighlighter : MonoBehaviour
     private void LockHighlight() {
         if (highlightStartIndex >= 0 && highlightEndIndex >= 0)
         {
-            string fullText = functionText.text;
+            string fullText = originalText;
 
             int validStartIndex = fullText.IndexOf(mainFunctionText);
             int validEndIndex = validStartIndex + mainFunctionText.Length - 1;
 
             if (highlightStartIndex >= validStartIndex && highlightEndIndex <= validEndIndex)
             {
-                selectedText = mainFunctionText;
+                selectedText = fullText.Substring(highlightStartIndex - validStartIndex, highlightEndIndex - highlightStartIndex + 1); ;
                 Debug.Log("Highlighted text: " + selectedText);
                 return;
             }
@@ -99,7 +103,7 @@ public class FunctionHighlighter : MonoBehaviour
     private void ResetHighlight()
     {
         selectedText = string.Empty;
-        functionText.text = mainFunctionText;
+        functionText.text = originalText;
         Debug.Log("Invalid highlight reset");
     }
 

@@ -63,7 +63,8 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
             new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 1.0f},
-            new Dialogue { speaker = "Jasper", text = "lol ok. one sec", triggersAction = true, action = "CopyCode"},
+            new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
+            new Dialogue { speaker = "Forrest", triggersAction = true, action = "CopyCode"}, //not working 
             // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
@@ -213,6 +214,12 @@ public class MessengerManager : MonoBehaviour
                 if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
                 {
                     SendMessage(true, dialogues[dialogueIndex].text);
+
+                    if (dialogues[dialogueIndex].triggersAction)
+                    {
+                        PerformAction(dialogues[dialogueIndex].action);
+                    }
+
                     dialogueIndex++;
 
                     StartCoroutine(ScheduleNPCResponse());
@@ -346,8 +353,11 @@ public class MessengerManager : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
             {
                 string clipboardText = GUIUtility.systemCopyBuffer;
+                Debug.Log(clipboardText); 
 
                 if (clipboardText == mainFunctionText) {
+                    Debug.Log("Valid text pasted into input field.");
+
                     ToggleInputField(true);
                     inputField.text += clipboardText;
                     isTypingComplete = true;
@@ -360,7 +370,7 @@ public class MessengerManager : MonoBehaviour
 
             if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
             {
-                SendMessage(true, mainFunctionText);
+                SendMessage(true, inputField.text);
                 dialogueIndex++;
 
                 StartCoroutine(ScheduleNPCResponse());
