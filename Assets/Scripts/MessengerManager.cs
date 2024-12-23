@@ -241,6 +241,14 @@ public class MessengerManager : MonoBehaviour
 
         var contentRect = messagesContainer.GetComponent<RectTransform>();
         contentRect.anchoredPosition = new Vector2(0, 0);
+
+        if (dialogues[dialogueIndex].speaker == "Jasper") 
+        {
+            HandlePlayerInput();
+        } else 
+        {
+            StartCoroutine(ScheduleNPCResponse()); 
+        }
        
     }
 
