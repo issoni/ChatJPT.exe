@@ -50,7 +50,7 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "i haven't even started T_T"},
             new Dialogue { speaker = "Jasper", text = "you know it’s due tmr right…"},
 
-            /*
+            
             // add more dialogue after testing
             new Dialogue { speaker = "Forrest", text = "IKKKK"},
             new Dialogue { speaker = "Forrest", text = "i left that shit for last minute like i always do. not only do i have to do the work but prepare for a mental breakdown"},
@@ -71,6 +71,7 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "divine"},
             new Dialogue { speaker = "Forrest", text = "thanks bro"},
             new Dialogue { speaker = "Jasper", text = "yeah yeah np :p lmk if you need more of my “help”"},
+            /*
             new Dialogue { speaker = "Forrest", text = "fo sho, thanks brother"},
             new Dialogue { speaker = "Jasper", text = "i gotchu, you must be busy from your internship - congrats on that btw :)"},
             new Dialogue { speaker = "Forrest", text = "hehe thank you thank you"},
@@ -242,13 +243,7 @@ public class MessengerManager : MonoBehaviour
         var contentRect = messagesContainer.GetComponent<RectTransform>();
         contentRect.anchoredPosition = new Vector2(0, 0);
 
-        if (dialogues[dialogueIndex].speaker == "Jasper") 
-        {
-            HandlePlayerInput();
-        } else 
-        {
-            StartCoroutine(ScheduleNPCResponse()); 
-        }
+        
        
     }
 
@@ -260,12 +255,13 @@ public class MessengerManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
+        while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest") //changed this to while from if 
         {
             Dialogue currentDialogue = dialogues[dialogueIndex];
             SendMessage(false, currentDialogue.text);
+            yield return new WaitForSeconds(1f);
 
-            if(currentDialogue.triggersAction)
+            if (currentDialogue.triggersAction)
             {
                 PerformAction(currentDialogue.action); 
             }
