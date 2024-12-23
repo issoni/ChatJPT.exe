@@ -347,10 +347,11 @@ public class MessengerManager : MonoBehaviour
 
         } else if (action == "CopyCode")
         {
-            ToggleInputField(false);
             const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
 
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+            ToggleInputField(false);
+
+            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V)) //add control on this and copy for windows 
             {
                 string clipboardText = GUIUtility.systemCopyBuffer;
                 Debug.Log(clipboardText); 
@@ -359,7 +360,7 @@ public class MessengerManager : MonoBehaviour
                     Debug.Log("Valid text pasted into input field.");
 
                     ToggleInputField(true);
-                    inputField.text += clipboardText;
+                    inputField.text = clipboardText;
                     isTypingComplete = true;
                     Debug.Log("Pasted into messenger"); 
                 } else

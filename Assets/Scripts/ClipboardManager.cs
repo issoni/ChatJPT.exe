@@ -8,9 +8,13 @@ public class ClipboardManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.C))
         {
+            Debug.Log("Ctrl + C detected.");
+
             string textToCopy = highlighter.GetSelectedText();
+            Debug.Log("Text to copy: " + (string.IsNullOrEmpty(textToCopy) ? "None" : textToCopy));
+
             if (!string.IsNullOrEmpty(textToCopy))
             {
                 GUIUtility.systemCopyBuffer = textToCopy;
