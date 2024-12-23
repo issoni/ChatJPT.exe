@@ -29,7 +29,7 @@ public class MessengerManager : MonoBehaviour
 
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
-    private bool isImageClicked = false; 
+    //private bool isImageClicked = false; 
 
     // other apps 
     public GameObject moozikPanel;
@@ -193,31 +193,35 @@ public class MessengerManager : MonoBehaviour
 
     void HandlePlayerInput()
     {
-        if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Jasper")
+        if (inputField.interactable)
         {
-            if (Input.anyKeyDown && !IsMouseInput() && inputField.text.Length < dialogues[dialogueIndex].text.Length)
+            if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Jasper")
             {
-                string currentText = dialogues[dialogueIndex].text.Substring(0, inputField.text.Length + 1);
-                inputField.text = currentText;
-                inputField.caretPosition = inputField.text.Length;
-
-                if (inputField.text == dialogues[dialogueIndex].text)
+                if (Input.anyKeyDown && !IsMouseInput() && inputField.text.Length < dialogues[dialogueIndex].text.Length)
                 {
-                    isTypingComplete = true;
+                    string currentText = dialogues[dialogueIndex].text.Substring(0, inputField.text.Length + 1);
+                    inputField.text = currentText;
+                    inputField.caretPosition = inputField.text.Length;
+
+                    if (inputField.text == dialogues[dialogueIndex].text)
+                    {
+                        isTypingComplete = true;
+                    }
+                }
+
+
+                if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
+                {
+                    SendMessage(true, dialogues[dialogueIndex].text);
+                    dialogueIndex++;
+
+                    StartCoroutine(ScheduleNPCResponse());
+                    ResetInputField();
+                    //linkClicked = false; 
                 }
             }
-
-
-            if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
-            {
-                SendMessage(true, dialogues[dialogueIndex].text);
-                dialogueIndex++;
-
-                StartCoroutine(ScheduleNPCResponse());
-                ResetInputField();
-                //linkClicked = false; 
-            }
         }
+            
     }
 
     void SendMessage(bool isPlayer, string messageText)
@@ -229,14 +233,15 @@ public class MessengerManager : MonoBehaviour
         TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
 
         messageContent.text = isPlayer
-        ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
-        : $"<color=#FF0000><b>for:</b></color> {messageText}";
+            ? $"<color=#0077FF><b>jas:</b></color> {messageText}"
+            : $"<color=#FF0000><b>for:</b></color> {messageText}";
 
-        
+
         Canvas.ForceUpdateCanvases();
 
-        var contentRect = messagesContainer.GetComponent<RectTransform>(); 
-        contentRect.anchoredPosition = new Vector2(0, 0); 
+        var contentRect = messagesContainer.GetComponent<RectTransform>();
+        contentRect.anchoredPosition = new Vector2(0, 0);
+       
     }
 
     IEnumerator ScheduleNPCResponse()
@@ -298,12 +303,20 @@ public class MessengerManager : MonoBehaviour
 
     }
 
+    void ToggleInputField (bool isEnabled)
+    {
+        inputField.interactable = isEnabled;
+        //Debug.Log($"InputField interactable set to: {isEnabled}");
+    }
+
 
     void PerformAction(string action)
     {
         if (action == "SongLinkImage")
         {
             GameObject newImageButton = Instantiate(buttonLink, messagesContainer.transform);
+            ToggleInputField(false);
+
 
             Button button = newImageButton.GetComponent<Button>();
             if (button != null)
@@ -326,6 +339,7 @@ public class MessengerManager : MonoBehaviour
     {
         Debug.Log("Opening Moozik application");
         moozikPanel.SetActive(true);
+        ToggleInputField(true);
         //link1Clicked = true;
     }
 
