@@ -12,6 +12,8 @@ public class Dialogue
     public string text;
     public bool triggersAction;
     public string action;
+    public float delay; // waiting before sending message 
+
     // i can add seconds as well, the time to wait between each text !! 
 }
 
@@ -40,30 +42,27 @@ public class MessengerManager : MonoBehaviour
     {
         dialogues = new List<Dialogue>
         {
-            new Dialogue { speaker = "Forrest", text = "yo"},
+            new Dialogue { speaker = "Forrest", text = "yo", delay = 3.0f},
             new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
-            new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3"},
+            new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3", delay = 3.0f},
             new Dialogue { speaker = "Jasper", text = "ooooo what music? bless my ears rn"},
-            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "SongLinkImage"},
+            new Dialogue { speaker = "Forrest", text = "hehe this SONG NAME", triggersAction = true, action = "SongLinkImage", delay = 1.7f},
             new Dialogue { speaker = "Jasper", text = "hmm... don't know how you are getting hw done with that shit on but you do you bro :D"},
-            new Dialogue { speaker = "Forrest", text = "uh yeah… actually jas"},
-            new Dialogue { speaker = "Forrest", text = "i haven't even started T_T"},
+            new Dialogue { speaker = "Forrest", text = "uh yeah… actually jas", delay = 1.5f},
+            new Dialogue { speaker = "Forrest", text = "i haven't even started T_T", delay = 1.5f},
             new Dialogue { speaker = "Jasper", text = "you know it’s due tmr right…"},
-
-            
-            // add more dialogue after testing
-            new Dialogue { speaker = "Forrest", text = "IKKKK"},
-            new Dialogue { speaker = "Forrest", text = "i left that shit for last minute like i always do. not only do i have to do the work but prepare for a mental breakdown"},
+            new Dialogue { speaker = "Forrest", text = "IKKKK", delay = 2.0f},
+            new Dialogue { speaker = "Forrest", text = "i left that shit for last minute like i always do. not only do i have to do the work but prepare for a mental breakdown", delay = 4.0f},
             new Dialogue { speaker = "Jasper", text = "rip, good luck. it took me a full week to finish lol"},
-            new Dialogue { speaker = "Forrest", text = "shit. how much you got left?"},
+            new Dialogue { speaker = "Forrest", text = "shit. how much you got left?", delay = 1.8f},
             new Dialogue { speaker = "Jasper", text = "just gotta test one more function and then im donee. lmk if you're gonna need help"},
-            new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer"},
-            new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?"},
-            new Dialogue { speaker = "Forrest", text = "pretty please"},
+            new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer", delay = 2.5f},
+            new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?", delay = 4.5f},
+            new Dialogue { speaker = "Forrest", text = "pretty please", delay = 1.5f},
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
-            new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|"},
+            new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 2.8f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
-            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;) "},
+            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 3.0f},
             new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
             // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful"},
@@ -253,13 +252,15 @@ public class MessengerManager : MonoBehaviour
         //inputField.readOnly = true;
         
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
+        Debug.Log(dialogues[dialogueIndex].delay); 
 
         while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest") //changed this to while from if 
         {
             Dialogue currentDialogue = dialogues[dialogueIndex];
             SendMessage(false, currentDialogue.text);
-            yield return new WaitForSeconds(1f);
+
+            yield return new WaitForSeconds(currentDialogue.delay);
 
             if (currentDialogue.triggersAction)
             {
@@ -269,9 +270,10 @@ public class MessengerManager : MonoBehaviour
             dialogueIndex++; 
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
+        Debug.Log(dialogues[dialogueIndex].delay);
 
-        
+
         isPlayerTurn = true;
 
     }
@@ -286,7 +288,9 @@ public class MessengerManager : MonoBehaviour
 
     IEnumerator PlayDialogues()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
+        Debug.Log(dialogues[dialogueIndex].delay);
+
 
         while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest")
         {
@@ -299,10 +303,12 @@ public class MessengerManager : MonoBehaviour
             }
 
             dialogueIndex++;
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(currentDialogue.delay);
+            Debug.Log(dialogues[dialogueIndex].delay);
+
         }
 
-        
+
         isPlayerTurn = true;
 
     }
