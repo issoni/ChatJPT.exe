@@ -31,6 +31,7 @@ public class MessengerManager : MonoBehaviour
 
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
+    private bool isPaused = false; 
     //private bool isImageClicked = false; 
 
     // other apps 
@@ -62,9 +63,8 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
             new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
-            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 1.0f},
-            new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
-            new Dialogue { speaker = "Forrest", triggersAction = true, action = "CopyCode"}, //not working 
+            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", triggersAction = true, action = "CopyCode", delay = 1.0f},
+            //new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
             // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
