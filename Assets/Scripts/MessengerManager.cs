@@ -65,8 +65,8 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
             new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
-            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", triggersAction = true, action = "CopyCode", delay = 1.0f},
-            //new Dialogue { speaker = "Jasper", text = "lol ok. one sec", },
+            new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 1.0f},
+            new Dialogue { triggersAction = true, action = "CopyCode" },
             // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
@@ -190,6 +190,52 @@ public class MessengerManager : MonoBehaviour
         if (isPlayerTurn)
         {
             HandlePlayerInput();
+        }
+
+        if (dialogues[dialogueIndex].action == "CopyCode")
+        {
+            const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
+
+            isPaused = true;
+            
+
+            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V)) //needs to be in update() !! 
+            {
+                string clipboardText = GUIUtility.systemCopyBuffer;
+                Debug.Log("In clipboard: " + clipboardText);
+
+                if (clipboardText == mainFunctionText)
+                {
+                    Debug.Log("Valid text pasted into input field.");
+
+                    //ToggleInputField(true);
+                    inputField.text = clipboardText;
+                    isTypingComplete = true;
+                    Debug.Log("Pasted into messenger");
+
+                    isPaused = false;
+
+               
+                }
+                else
+                {
+                    Debug.LogWarning("Invalid text in clipboard.");
+                }
+            }
+
+            if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
+            {
+                Debug.Log("Enter key pressed. Sending message...");
+                SendMessage(true, inputField.text);
+                dialogueIndex++;
+
+                isPaused = false;
+                StartCoroutine(ScheduleNPCResponse());
+                ResetInputField();
+                //linkClicked = false; 
+            }
+
+
         }
 
     }
@@ -353,8 +399,10 @@ public class MessengerManager : MonoBehaviour
 
         } else if (action == "CopyCode")
         {
+            /*
             const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
 
+            
             isPaused = true;
             inputField.readOnly = false; 
             isTypingComplete = false;
@@ -390,6 +438,7 @@ public class MessengerManager : MonoBehaviour
                 ResetInputField();
                 //linkClicked = false; 
             }
+            */
 
         }
     }
