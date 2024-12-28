@@ -2965,6 +2965,7 @@ MonoBehaviour:
   playerMessagePrefab: {fileID: 635586818948965472, guid: 5f02a250f0d754e338049f5ff7772a1a, type: 3}
   npcMessagePrefab: {fileID: 3650312333866867594, guid: a1010e89f68ca46bfa763c6191a8a09e, type: 3}
   buttonLink: {fileID: 2332139829830935698, guid: f742d7f5032b84b27bc9b956626a6dc8, type: 3}
+  chatJPTLink: {fileID: 1595691006900589335, guid: 69235b77d1f3e458c8dbfb2e6601c690, type: 3}
   dialogues: []
   moozikPanel: {fileID: 502977783}
 --- !u!1 &1508498779

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 // dialogue system
@@ -24,7 +24,8 @@ public class MessengerManager : MonoBehaviour
     public GameObject messagesContainer;
     public GameObject playerMessagePrefab;
     public GameObject npcMessagePrefab;
-    public GameObject buttonLink; 
+    public GameObject buttonLink;
+    public GameObject chatJPTLink;
 
     public List<Dialogue> dialogues;
     private int dialogueIndex = 0; 
@@ -73,39 +74,38 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "divine", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "thanks bro", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "yeah yeah np :p lmk if you need more of my “help”"},
-            /*
-            new Dialogue { speaker = "Forrest", text = "fo sho, thanks brother"},
+            new Dialogue { speaker = "Forrest", text = "fo sho, thanks brother", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "i gotchu, you must be busy from your internship - congrats on that btw :)"},
-            new Dialogue { speaker = "Forrest", text = "hehe thank you thank you"},
-            new Dialogue { speaker = "Forrest", text = "and yeah, it’s been feeling like a lot lately but i made a new friend at work so that’s cool"},
+            new Dialogue { speaker = "Forrest", text = "hehe thank you thank you", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "and yeah, it’s been feeling like a lot lately but i made a new friend at work so that’s cool", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lessgoooo. so who is this new friend?"},
-            new Dialogue { speaker = "Forrest", text = "ethan"},
-            new Dialogue { speaker = "Forrest", text = "bro is pretty introverted and can be awkward at times but we seem to get along fine"},
+            new Dialogue { speaker = "Forrest", text = "ethan", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "bro is pretty introverted and can be awkward at times but we seem to get along fine", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "niceee, hey atleast you have someone to keep you company at work right"},
-            new Dialogue { speaker = "Forrest", text = "fo shooo"},
-            new Dialogue { speaker = "Forrest", text = "omg btw, Ethan told me about this new app he had been working on"},
-            new Dialogue { speaker = "Forrest", text = "it's some crazy futuristic shit"},
+            new Dialogue { speaker = "Forrest", text = "fo shooo", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "oh btw, Ethan told me about this new app he had been working on", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "it's some crazy futuristic shit", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = ":o damn, tell me more"},
-            new Dialogue { speaker = "Forrest", text = "ye, i think he is done with the development and just needs to do testing"},
-            new Dialogue { speaker = "Forrest", text = "it’s called ChatJPT"},
+            new Dialogue { speaker = "Forrest", text = "ye, i think he is done with the development and just needs to do testing", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "it’s called ChatJPT", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "it does sound like some crazy futuristic shit lol what is it about"},
-            new Dialogue { speaker = "Forrest", text = "it’s like this machine learning model that he trained using hella data and techniques"},
-            new Dialogue { speaker = "Forrest", text = "that’s what he told me at least"},
+            new Dialogue { speaker = "Forrest", text = "it’s like this machine learning model that he trained using hella data and techniques", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "that’s what he told me at least", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "damn, that actually sounds kinda cool. so what does it do?"},
-            new Dialogue { speaker = "Forrest", text = "it can do anything bro. write an essay, code your hw, make a resume for you, im telling you literally anything"},
-            new Dialogue { speaker = "Forrest", text = "it can also probably give you tips on how to flirt with Shura too lmao"},
+            new Dialogue { speaker = "Forrest", text = "it can do anything bro. write an essay, code your hw, make a resume for you, im telling you literally anything", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "it can also probably give you tips on how to flirt with Shura too lmao", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "stfu :|"},
-            new Dialogue { speaker = "Forrest", text = "nah but seriously tho it seems pretty cool"},
-            new Dialogue { speaker = "Forrest", text = "he actually sent it to me to test it this past week"},
-            new Dialogue { speaker = "Forrest", text = "i just haven't gotten around to it cuz of school, work and maya"},
+            new Dialogue { speaker = "Forrest", text = "nah but seriously tho it seems pretty cool", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "he actually sent it to me to test it this past week", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "i just haven't gotten around to it cuz of school, work and maya", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "hmm i see. you know, i'm pretty free today and you got me interested in this thing..." },
-            new Dialogue { speaker = "Forrest", text = "ofc i got you interested in this, you nerd"},
+            new Dialogue { speaker = "Forrest", text = "ofc i got you interested in this, you nerd", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "if Ethan’s cool with it, do you think i can test it out too?"},
-            new Dialogue { speaker = "Forrest", text = "sure brother, i was gonna ask you anyways hehe"},
-            new Dialogue { speaker = "Forrest", text = "lemme send it to you, one sec"},
+            new Dialogue { speaker = "Forrest", text = "sure brother, i was gonna ask you anyways hehe", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "lemme send it to you, one sec", triggersAction = true, action = "ChatJPTLink", delay = 1.0f},
             // SENDS CHATJPT
-            new Dialogue { speaker = "Forrest", text = "lemme know what you think!"},
-            // Jasper clicks and downloads it 
+            new Dialogue { speaker = "Forrest", text = "lemme know what you think!", delay = 1.0f},
+            // Jasper clicks and downloads it (cant type until downloaded) 
             new Dialogue { speaker = "Jasper", text = "nice :) i'll let you know for sure"},
             new Dialogue { speaker = "Forrest", text = "cool beanzzz"},
             new Dialogue { speaker = "Jasper", text = "btw how is it going with maya lately?"},
@@ -133,6 +133,7 @@ public class MessengerManager : MonoBehaviour
             // Forrest likes the message
             // GLITCH
 
+            /*
             // SHURA ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             new Dialogue { speaker = "Shura", text = "hey Jas! :-)"},
@@ -397,49 +398,20 @@ public class MessengerManager : MonoBehaviour
                 });
             }
 
-        } else if (action == "CopyCode")
+        } else if (action == "ChatJPTLink")
         {
-            /*
-            const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
 
-            
-            isPaused = true;
-            inputField.readOnly = false; 
-            isTypingComplete = false;
-            //ToggleInputField(false);
+            GameObject newLink = Instantiate(chatJPTLink, messagesContainer.transform);
+            ToggleInputField(false);
 
-            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V)) //needs to be in update() !! 
+            Button button = newLink.GetComponent<Button>();
+            if (button != null)
             {
-                string clipboardText = GUIUtility.systemCopyBuffer;
-                Debug.Log("In clipboard: " + clipboardText); 
-
-                if (clipboardText == mainFunctionText) {
-                    Debug.Log("Valid text pasted into input field.");
-
-                    //ToggleInputField(true);
-                    inputField.text = clipboardText;
-                    isTypingComplete = true;
-                    Debug.Log("Pasted into messenger");
-
-                    isPaused = false;
-                }
-                else
+                button.onClick.AddListener(() =>
                 {
-                    Debug.LogWarning("Invalid text in clipboard."); 
-                }
+                    PlayDownloadAnimation(); 
+                });
             }
-
-            if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
-            {
-                SendMessage(true, inputField.text);
-                dialogueIndex++;
-
-                StartCoroutine(ScheduleNPCResponse());
-                ResetInputField();
-                //linkClicked = false; 
-            }
-            */
-
         }
     }
 
@@ -450,6 +422,13 @@ public class MessengerManager : MonoBehaviour
         moozikPanel.SetActive(true);
         ToggleInputField(true);
         //link1Clicked = true;
+    }
+
+    public void PlayDownloadAnimation()
+    {
+        //ADD DOWNLOAD ANIMATION
+        ToggleInputField(true);
+
     }
 
 
