@@ -356,10 +356,11 @@ public class MessengerManager : MonoBehaviour
             const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
 
             isPaused = true;
+            inputField.readOnly = false; 
             isTypingComplete = false;
             //ToggleInputField(false);
 
-            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V))  
+            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V)) //needs to be in update() !! 
             {
                 string clipboardText = GUIUtility.systemCopyBuffer;
                 Debug.Log("In clipboard: " + clipboardText); 
