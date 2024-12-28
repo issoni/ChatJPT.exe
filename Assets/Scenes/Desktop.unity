@@ -1161,7 +1161,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 154, y: -118.63}
+  m_AnchoredPosition: {x: 243.81, y: -118.63}
   m_SizeDelta: {x: -555.5215, y: -312.4783}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &594507551
@@ -1291,7 +1291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 145.19289, y: -22.466}
+  m_AnchoredPosition: {x: 252.62, y: 8}
   m_SizeDelta: {x: -537.9059, y: -120.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &604362849
@@ -1345,6 +1345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighter: {fileID: 604362852}
+  inputField: {fileID: 1361129865}
 --- !u!114 &604362852
 MonoBehaviour:
   m_ObjectHideFlags: 0

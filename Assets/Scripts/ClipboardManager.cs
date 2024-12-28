@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro; 
 
 public class ClipboardManager : MonoBehaviour
 {
-    public FunctionHighlighter highlighter; 
+    public FunctionHighlighter highlighter;
+    //maybe add input field here to make it interactable
+    public TMP_InputField inputField;
+
+
 
     void Update()
     {
@@ -18,6 +23,12 @@ public class ClipboardManager : MonoBehaviour
             if (!string.IsNullOrEmpty(textToCopy))
             {
                 GUIUtility.systemCopyBuffer = textToCopy;
+
+                inputField.text = "";
+                inputField.readOnly = true;
+                inputField.interactable = true;
+
+
                 Debug.Log("Copied to clipboard: " + textToCopy); 
             }
         }

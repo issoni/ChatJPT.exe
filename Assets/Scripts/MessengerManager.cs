@@ -43,6 +43,7 @@ public class MessengerManager : MonoBehaviour
     {
         dialogues = new List<Dialogue>
         {
+            /*
             new Dialogue { speaker = "Forrest", text = "yo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "yo, what's up bro"},
             new Dialogue { speaker = "Forrest", text = "nothing bro, just listening to music while trying to work on hw 3", delay = 1.0f},
@@ -59,12 +60,13 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "just gotta test one more function and then im donee. lmk if you're gonna need help"},
             new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?", delay = 1.0f},
+            */
             new Dialogue { speaker = "Forrest", text = "pretty please", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
             new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
             new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", triggersAction = true, action = "CopyCode", delay = 1.0f},
-            //new Dialogue { speaker = "Jasper", text = "lol ok. one sec"},
+            //new Dialogue { speaker = "Jasper", text = "lol ok. one sec", },
             // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
@@ -189,12 +191,12 @@ public class MessengerManager : MonoBehaviour
         {
             HandlePlayerInput();
         }
-        
+
     }
 
     void HandlePlayerInput()
     {
-        if (inputField.interactable)
+        if (inputField.interactable && !isPaused)
         {
             if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Jasper")
             {
@@ -255,33 +257,37 @@ public class MessengerManager : MonoBehaviour
 
     IEnumerator ScheduleNPCResponse()
     {
-        isPlayerTurn = false;
-        //inputField.readOnly = true;
-        
-
-        yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
-        //Debug.Log(dialogues[dialogueIndex].delay); 
-
-        while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest") //changed this to while from if 
+        if (!isPaused)
         {
-            Dialogue currentDialogue = dialogues[dialogueIndex];
-            SendMessage(false, currentDialogue.text);
+            isPlayerTurn = false;
+            //inputField.readOnly = true;
 
-            yield return new WaitForSeconds(currentDialogue.delay);
 
-            if (currentDialogue.triggersAction)
+            yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
+            //Debug.Log(dialogues[dialogueIndex].delay); 
+
+            while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest" && !isPaused) //changed this to while from if 
             {
-                PerformAction(currentDialogue.action); 
+                Dialogue currentDialogue = dialogues[dialogueIndex];
+                SendMessage(false, currentDialogue.text);
+
+                yield return new WaitForSeconds(currentDialogue.delay);
+
+                if (currentDialogue.triggersAction)
+                {
+                    PerformAction(currentDialogue.action);
+                }
+
+                dialogueIndex++;
             }
 
-            dialogueIndex++; 
+            yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
+            //Debug.Log(dialogues[dialogueIndex].delay);
+
+
+            isPlayerTurn = true;
         }
-
-        yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
-        //Debug.Log(dialogues[dialogueIndex].delay);
-
-
-        isPlayerTurn = true;
+        
 
     }
 
@@ -349,21 +355,26 @@ public class MessengerManager : MonoBehaviour
         {
             const string mainFunctionText = "public void Main() {\n  Debug.Log(\"Hello\");\n}";
 
-            ToggleInputField(false);
+            isPaused = true;
+            isTypingComplete = false;
+            //ToggleInputField(false);
 
-            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V)) //add control on this and copy for windows 
+            if (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.V))  
             {
                 string clipboardText = GUIUtility.systemCopyBuffer;
-                Debug.Log(clipboardText); 
+                Debug.Log("In clipboard: " + clipboardText); 
 
                 if (clipboardText == mainFunctionText) {
                     Debug.Log("Valid text pasted into input field.");
 
-                    ToggleInputField(true);
+                    //ToggleInputField(true);
                     inputField.text = clipboardText;
                     isTypingComplete = true;
-                    Debug.Log("Pasted into messenger"); 
-                } else
+                    Debug.Log("Pasted into messenger");
+
+                    isPaused = false;
+                }
+                else
                 {
                     Debug.LogWarning("Invalid text in clipboard."); 
                 }
