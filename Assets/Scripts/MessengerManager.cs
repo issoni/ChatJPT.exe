@@ -33,10 +33,15 @@ public class MessengerManager : MonoBehaviour
     private bool isPlayerTurn = false;
     private bool isTypingComplete = false;
     private bool isPaused = false; 
-    //private bool isImageClicked = false; 
 
     // other apps 
     public GameObject moozikPanel;
+
+    public Button shuraButton;
+    public Text shuraButtonText;
+    private int shuraUnreadMessages = 0;
+    private Color defaultColor = Color.magenta;
+    private Color unreadColor = Color.green; 
 
 
 
@@ -61,14 +66,12 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "just gotta test one more function and then im donee. lmk if you're gonna need help"},
             new Dialogue { speaker = "Forrest", text = "perhaps i'll take you up on that offer", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "wanna give me a headstart and let me see what you did for the main function?", delay = 1.0f},
-            */
             new Dialogue { speaker = "Forrest", text = "pretty please", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "are you asking me to take part in plagiarism right now :O"},
             new Dialogue { speaker = "Forrest", text = "you’re acting like this is your first time :|", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "lmao im kidding bro. hold on, lemme pull it up - u want me to send it by mail or what?"},
             new Dialogue { speaker = "Forrest", text = "nah just copy paste that shit here ;)", delay = 1.0f},
             new Dialogue { triggersAction = true, action = "CopyCode" },
-            // copy paster code action 
             new Dialogue { speaker = "Forrest", text = "beautiful", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "amazing", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "divine", delay = 1.0f},
@@ -103,25 +106,24 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Jasper", text = "if Ethan’s cool with it, do you think i can test it out too?"},
             new Dialogue { speaker = "Forrest", text = "sure brother, i was gonna ask you anyways hehe", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "lemme send it to you, one sec", triggersAction = true, action = "ChatJPTLink", delay = 1.0f},
-            // SENDS CHATJPT
             new Dialogue { speaker = "Forrest", text = "lemme know what you think!", delay = 1.0f},
-            // Jasper clicks and downloads it (cant type until downloaded) 
             new Dialogue { speaker = "Jasper", text = "nice :) i'll let you know for sure"},
-            new Dialogue { speaker = "Forrest", text = "cool beanzzz"},
+            new Dialogue { speaker = "Forrest", text = "cool beanzzz", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "btw how is it going with maya lately?"},
-            new Dialogue { speaker = "Forrest", text = "it's good, bro :) im just"},
-            new Dialogue { speaker = "Forrest", text = "really very happy :))"},
+            new Dialogue { speaker = "Forrest", text = "it's good, bro :) im just", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "really very happy :))", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "so happy for you bromie!! i remember when you used to tell me about the little things you and her used to talk about, and now ya’ll dating :)"},
-            new Dialogue { speaker = "Forrest", text = "yeah bro, i feel so lucky"},
-            new Dialogue { speaker = "Forrest", text = "how are things with Shura?"},
-            new Dialogue { speaker = "Forrest", text = "in which decade will you ask her out?? :p"},
+            new Dialogue { speaker = "Forrest", text = "yeah bro, i feel so lucky", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "how are things with Shura?", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "in which decade will you ask her out?? :p", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ummmmmmm… i was actually going to do it today :D"},
-            new Dialogue { speaker = "Forrest", text = "WAIT FR?? lets goooooo"},
+            */
+            new Dialogue { speaker = "Forrest", text = "WAIT FR?? lets goooooo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "i'm a little nervous but i think i am finally ready to do it. she has been living in my head rent free"},
-            new Dialogue { speaker = "Forrest", text = "lmao yeah bro just do it, you're gonna feel so relieved and happy im telling u"},
+            new Dialogue { speaker = "Forrest", text = "lmao yeah bro just do it, you're gonna feel so relieved and happy im telling u", triggersAction = true, action = "ShuraFirstMessage", delay = 1.0f},
             // SHURA sends a message to us - add it later 
-            new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you"},
-            new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me..."},
+            new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you", delay = 1.0f},
+            new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me...", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "IT'S A SIGN, DO IT RNNNN"},
             new Dialogue { speaker = "Jasper", text = "shit, really?"},
             new Dialogue { speaker = "Forrest", text = "YESSSSS BRAH"},
@@ -412,6 +414,15 @@ public class MessengerManager : MonoBehaviour
                     PlayDownloadAnimation(); 
                 });
             }
+        } else if (action == "ShuraFirstMessage")
+        {
+            shuraUnreadMessages++;
+
+            ColorBlock colors = shuraButton.colors;
+            colors.normalColor = unreadColor;
+            shuraButton.colors = colors;
+
+            shuraButtonText.text = $"Shura ({shuraUnreadMessages})";
         }
     }
 
@@ -431,6 +442,18 @@ public class MessengerManager : MonoBehaviour
 
     }
 
+    public void OnShuraButtonClick()
+    {
+        shuraUnreadMessages = 0;
+
+        ColorBlock colors = shuraButton.colors;
+        colors.normalColor = defaultColor;
+        shuraButton.colors = colors;
+
+        shuraButtonText.text = "Shura";
+
+        //activate the messenger screen 
+    }
 
     private bool IsMouseInput()
     {
