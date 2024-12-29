@@ -22,8 +22,10 @@ public class MessengerManager : MonoBehaviour
     // dialogue system
     public TMP_InputField inputField;
     public GameObject messagesContainer;
+
     public GameObject playerMessagePrefab;
     public GameObject npcMessagePrefab;
+
     public GameObject buttonLink;
     public GameObject chatJPTLink;
 
@@ -41,7 +43,13 @@ public class MessengerManager : MonoBehaviour
     public Text shuraButtonText;
     private int shuraUnreadMessages = 0;
     private Color defaultColor = Color.magenta;
-    private Color unreadColor = Color.green; 
+    private Color unreadColor = Color.green;
+
+    public Button forrestButton;
+    public Text forrestButtonText;
+    private int forrestUnreadMessages = 0;
+
+   
 
 
 
@@ -118,21 +126,22 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "in which decade will you ask her out?? :p", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ummmmmmm… i was actually going to do it today :D"},
             */
+            // SHURA comes online 
             new Dialogue { speaker = "Forrest", text = "WAIT FR?? lets goooooo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "i'm a little nervous but i think i am finally ready to do it. she has been living in my head rent free"},
             new Dialogue { speaker = "Forrest", text = "lmao yeah bro just do it, you're gonna feel so relieved and happy im telling u", triggersAction = true, action = "ShuraFirstMessage", delay = 1.0f},
             // SHURA sends a message to us - add it later 
             new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me...", delay = 1.0f},
-            new Dialogue { speaker = "Forrest", text = "IT'S A SIGN, DO IT RNNNN"},
+            new Dialogue { speaker = "Forrest", text = "IT'S A SIGN, DO IT RNNNN", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "shit, really?"},
-            new Dialogue { speaker = "Forrest", text = "YESSSSS BRAH"},
+            new Dialogue { speaker = "Forrest", text = "YESSSSS BRAH", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "sdhfudhfsduhnfsdk okay fine ill do it"},
-            new Dialogue { speaker = "Forrest", text = "go get her tiger"},
-            new Dialogue { speaker = "Forrest", text = "i have to go work on this damn hw anyways"},
-            new Dialogue { speaker = "Forrest", text = "lmk what happens ;)"},
+            new Dialogue { speaker = "Forrest", text = "go get her tiger", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "i have to go work on this damn hw anyways", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "lmk what happens ;)", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "damn you're gonna leave me alone now huh, see ya bro T_T"},
-            // Forrest likes the message
+            // Forrest likes the message and goes offline
             // GLITCH
 
             /*
@@ -452,7 +461,12 @@ public class MessengerManager : MonoBehaviour
 
         shuraButtonText.text = "Shura";
 
-        //activate the messenger screen 
+        ActivateMessengerScreen("Shura");  
+    }
+
+    private void ActivateMessengerScreen(RectTransform messengerPanel)
+    {
+        
     }
 
     private bool IsMouseInput()
