@@ -352,7 +352,8 @@ public class MessengerManager : MonoBehaviour
             yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
             //Debug.Log(dialogues[dialogueIndex].delay); 
 
-            while (dialogueIndex < dialogues.Count && !isPaused)  //changed this to while from if 
+            while ((dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest" && !isPaused) ||
+                (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Shura" && !isPaused))  //changed this to while from if 
             {
                 Dialogue currentDialogue = dialogues[dialogueIndex];
 
@@ -361,16 +362,14 @@ public class MessengerManager : MonoBehaviour
                     activeMessenger = "Shura";
                     generalInputField = inputField2;
                     generalMessagesContainer = messagesContainer2;
-                    messengerPanelShura.gameObject.SetActive(true);
-                    messengerPanelForrest.gameObject.SetActive(false);
+                    
                 }
                 else if (currentDialogue.speaker == "Forrest")
                 {
                     activeMessenger = "Forrest";
                     generalInputField = inputField;
                     generalMessagesContainer = messagesContainer;
-                    messengerPanelForrest.gameObject.SetActive(true);
-                    messengerPanelShura.gameObject.SetActive(false);
+                    
                 }
 
                 SendMessage(false, currentDialogue.text);
