@@ -20,8 +20,19 @@ public class Dialogue
 public class MessengerManager : MonoBehaviour
 {
     // dialogue system
+    public RectTransform messengerPanelForrest; 
+    public RectTransform messengerPanelShura;
+
     public TMP_InputField inputField;
     public GameObject messagesContainer;
+
+    // For Shura
+    public TMP_InputField inputField2;
+    public GameObject messagesContainer2;
+
+    //switches between Forrest and Shura
+    private TMP_InputField generalInputField;
+    private GameObject generalMessagesContainer; 
 
     public GameObject playerMessagePrefab;
     public GameObject npcMessagePrefab;
@@ -49,7 +60,7 @@ public class MessengerManager : MonoBehaviour
     public Text forrestButtonText;
     private int forrestUnreadMessages = 0;
 
-   
+    private string activeMessenger = "Forrest";
 
 
 
@@ -130,7 +141,9 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Forrest", text = "WAIT FR?? lets goooooo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "i'm a little nervous but i think i am finally ready to do it. she has been living in my head rent free"},
             new Dialogue { speaker = "Forrest", text = "lmao yeah bro just do it, you're gonna feel so relieved and happy im telling u", triggersAction = true, action = "ShuraFirstMessage", delay = 1.0f},
-            // SHURA sends a message to us - add it later 
+            // SHURA sends a message to us - add it later
+            new Dialogue { speaker = "Shura", text = "hey Jas! :-)", delay = 1.0f},
+
             new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me...", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "IT'S A SIGN, DO IT RNNNN", delay = 1.0f},
@@ -144,15 +157,16 @@ public class MessengerManager : MonoBehaviour
             // Forrest likes the message and goes offline
             // GLITCH
 
-            /*
+            
             // SHURA ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            new Dialogue { speaker = "Shura", text = "hey Jas! :-)"},
+            //new Dialogue { speaker = "Shura", text = "hey Jas! :-)", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "hi Shura!!"},
-            new Dialogue { speaker = "Shura", text = "whatchu up toooo"},
+            new Dialogue { speaker = "Shura", text = "whatchu up toooo", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "i was just chatting with Forrest. we were actually talking about you just now haha"},
-            new Dialogue { speaker = "Shura", text = "talking shit about me huh :(((("},
+            new Dialogue { speaker = "Shura", text = "talking shit about me huh :((((", delay = 1.0f},
             // GLITCH
+            /*
             new Dialogue { speaker = "Jasper", text = "nooo, just was thinking about texting you so it just came up hehe"},
             new Dialogue { speaker = "Shura", text = "oooo, Jasper Frye was thinking about texting me??"},
             new Dialogue { speaker = "Shura", text = "i'm so lucky omg"},
@@ -192,12 +206,26 @@ public class MessengerManager : MonoBehaviour
 
         inputField.text = "";
         inputField.readOnly = true;
+        inputField2.text = "";
+        inputField2.readOnly = true;
+
+        messengerPanelShura.gameObject.SetActive(false); 
 
         StartCoroutine(PlayDialogues()); 
      }
 
     void Update()  
     {
+        if (activeMessenger == "Forrest")
+        {
+            generalInputField = inputField;
+            generalMessagesContainer = messagesContainer;
+        } else
+        {
+            generalInputField = inputField2;
+            generalMessagesContainer = messagesContainer2; 
+        }
+
 
         if (isPlayerTurn)
         {
@@ -221,7 +249,7 @@ public class MessengerManager : MonoBehaviour
                     Debug.Log("Valid text pasted into input field.");
 
                     //ToggleInputField(true);
-                    inputField.text = clipboardText;
+                    generalInputField.text = clipboardText;
                     isTypingComplete = true;
                     Debug.Log("Pasted into messenger");
 
@@ -238,7 +266,7 @@ public class MessengerManager : MonoBehaviour
             if (isTypingComplete && Input.GetKeyDown(KeyCode.Return))
             {
                 Debug.Log("Enter key pressed. Sending message...");
-                SendMessage(true, inputField.text);
+                SendMessage(true, generalInputField.text);
                 dialogueIndex++;
 
                 isPaused = false;
@@ -254,17 +282,17 @@ public class MessengerManager : MonoBehaviour
 
     void HandlePlayerInput()
     {
-        if (inputField.interactable && !isPaused)
+        if (generalInputField.interactable && !isPaused)
         {
             if (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Jasper")
             {
-                if (Input.anyKeyDown && !IsMouseInput() && inputField.text.Length < dialogues[dialogueIndex].text.Length)
+                if (Input.anyKeyDown && !IsMouseInput() && generalInputField.text.Length < dialogues[dialogueIndex].text.Length)
                 {
-                    string currentText = dialogues[dialogueIndex].text.Substring(0, inputField.text.Length + 1);
-                    inputField.text = currentText;
-                    inputField.caretPosition = inputField.text.Length;
+                    string currentText = dialogues[dialogueIndex].text.Substring(0, generalInputField.text.Length + 1);
+                    generalInputField.text = currentText;
+                    generalInputField.caretPosition = generalInputField.text.Length;
 
-                    if (inputField.text == dialogues[dialogueIndex].text)
+                    if (generalInputField.text == dialogues[dialogueIndex].text)
                     {
                         isTypingComplete = true;
                     }
@@ -295,7 +323,7 @@ public class MessengerManager : MonoBehaviour
     {
         GameObject messagePrefab = isPlayer ? playerMessagePrefab : npcMessagePrefab;
 
-        GameObject newMessage = Instantiate(messagePrefab, messagesContainer.transform);
+        GameObject newMessage = Instantiate(messagePrefab, generalMessagesContainer.transform);
 
         TMP_Text messageContent = newMessage.GetComponent<TMP_Text>();
 
@@ -306,10 +334,10 @@ public class MessengerManager : MonoBehaviour
 
         Canvas.ForceUpdateCanvases();
 
-        var contentRect = messagesContainer.GetComponent<RectTransform>();
+        var contentRect = generalMessagesContainer.GetComponent<RectTransform>();
         contentRect.anchoredPosition = new Vector2(0, 0);
 
-        
+        // NEED TO MAKE A PREFAB FOR SHURA 
        
     }
 
@@ -324,7 +352,8 @@ public class MessengerManager : MonoBehaviour
             yield return new WaitForSeconds(dialogues[dialogueIndex].delay);
             //Debug.Log(dialogues[dialogueIndex].delay); 
 
-            while (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest" && !isPaused) //changed this to while from if 
+            while ((dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Forrest" && !isPaused) ||
+                (dialogueIndex < dialogues.Count && dialogues[dialogueIndex].speaker == "Shura" && !isPaused)) //changed this to while from if 
             {
                 Dialogue currentDialogue = dialogues[dialogueIndex];
                 SendMessage(false, currentDialogue.text);
@@ -351,8 +380,8 @@ public class MessengerManager : MonoBehaviour
 
     void ResetInputField()
     {
-        inputField.text = "";
-        inputField.caretPosition = 0;
+        generalInputField.text = "";
+        generalInputField.caretPosition = 0;
         isTypingComplete = false;
     }
 
@@ -386,7 +415,7 @@ public class MessengerManager : MonoBehaviour
 
     void ToggleInputField (bool isEnabled)
     {
-        inputField.interactable = isEnabled;
+        generalInputField.interactable = isEnabled;
         //Debug.Log($"InputField interactable set to: {isEnabled}");
     }
 
@@ -395,7 +424,7 @@ public class MessengerManager : MonoBehaviour
     {
         if (action == "SongLinkImage")
         {
-            GameObject newImageButton = Instantiate(buttonLink, messagesContainer.transform);
+            GameObject newImageButton = Instantiate(buttonLink, generalMessagesContainer.transform);
             ToggleInputField(false);
 
 
@@ -412,7 +441,7 @@ public class MessengerManager : MonoBehaviour
         } else if (action == "ChatJPTLink")
         {
 
-            GameObject newLink = Instantiate(chatJPTLink, messagesContainer.transform);
+            GameObject newLink = Instantiate(chatJPTLink, generalMessagesContainer.transform);
             ToggleInputField(false);
 
             Button button = newLink.GetComponent<Button>();
@@ -461,12 +490,36 @@ public class MessengerManager : MonoBehaviour
 
         shuraButtonText.text = "Shura";
 
-        ActivateMessengerScreen("Shura");  
+        ActivateMessengerScreen(messengerPanelShura);
+        activeMessenger = "Shura"; 
     }
 
     private void ActivateMessengerScreen(RectTransform messengerPanel)
     {
-        
+        if (messengerPanel == messengerPanelShura)
+        {
+            messengerPanelForrest.gameObject.SetActive(false);
+            messengerPanelShura.gameObject.SetActive(true); 
+        } else
+        {
+            messengerPanelShura.gameObject.SetActive(false);
+            messengerPanelForrest.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnForrestButtonClick()
+    {
+        forrestUnreadMessages = 0;
+
+        ColorBlock colors = forrestButton.colors;
+        colors.normalColor = defaultColor;
+        forrestButton.colors = colors;
+
+        forrestButtonText.text = "Forrest";
+
+        ActivateMessengerScreen(messengerPanelForrest);
+        activeMessenger = "Forrest";
+
     }
 
     private bool IsMouseInput()
