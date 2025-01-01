@@ -146,14 +146,15 @@ public class MessengerManager : MonoBehaviour
 
             new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me...", delay = 1.0f},
-            new Dialogue { speaker = "Forrest", text = "IT'S A SIGN, DO IT RNNNN", delay = 1.0f},
+            new Dialogue { speaker = "Forrest", text = "YO IT'S A SIGN, DO IT RNNNN", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "shit, really?"},
             new Dialogue { speaker = "Forrest", text = "YESSSSS BRAH", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "sdhfudhfsduhnfsdk okay fine ill do it"},
             new Dialogue { speaker = "Forrest", text = "go get her tiger", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "i have to go work on this damn hw anyways", delay = 1.0f},
             new Dialogue { speaker = "Forrest", text = "lmk what happens ;)", delay = 1.0f},
-            new Dialogue { speaker = "Jasper", text = "damn you're gonna leave me alone now huh, see ya bro T_T"},
+            new Dialogue { speaker = "Jasper", text = "damn you're gonna leave me alone now huh, see ya bro T_T"}, // ADD Animation to like the message 
+            new Dialogue { triggersAction = true, action = "ForrestLeaves"}, 
             // Forrest likes the message and goes offline
             // GLITCH
 
@@ -477,6 +478,12 @@ public class MessengerManager : MonoBehaviour
             shuraButton.colors = colors;
 
             shuraButtonText.text = $"Shura ({shuraUnreadMessages})";
+
+
+        } else if (action == "ForrestLeaves")
+        {
+            // ANIMATION FOR LIKING THE LAST MESSAGE FROM JAS
+
 
 
         }
