@@ -145,7 +145,7 @@ public class MessengerManager : MonoBehaviour
             new Dialogue { speaker = "Shura", text = "hey Jas! :-)", delay = 1.0f},
 
             new Dialogue { speaker = "Forrest", text = "and watch her reciprocate those feelings back to you", delay = 1.0f},
-            new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me...", delay = 1.0f},
+            new Dialogue { speaker = "Jasper", text = "ok ok imma do it. in fact, she just messaged me..."},
             new Dialogue { speaker = "Forrest", text = "YO IT'S A SIGN, DO IT RNNNN", delay = 1.0f},
             new Dialogue { speaker = "Jasper", text = "shit, really?"},
             new Dialogue { speaker = "Forrest", text = "YESSSSS BRAH", delay = 1.0f},
@@ -484,7 +484,27 @@ public class MessengerManager : MonoBehaviour
         {
             // ANIMATION FOR LIKING THE LAST MESSAGE FROM JAS
 
+            /*
+            if (generalInputField == inputField && generalMessagesContainer == messagesContainer)
+            {
+                Debug.Log("meow"); 
+                generalInputField = inputField2;
+                generalMessagesContainer = messagesContainer2;
 
+                inputField.interactable = false;
+                inputField2.interactable = true; 
+                
+
+                activeMessenger = "Shura";
+
+            }
+            */
+
+            //activeMessenger = "Shura";
+            //generalInputField = inputField2;
+            //generalMessagesContainer = messagesContainer2;
+
+            // FORREST GOES OFFLINE 
 
         }
     }
